@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wsc",
+  "name": "Wireless Switch Control",
+  "description": "Control your redstone signals easily !",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Franckyi"],
+  "credits": "Emex for giving me this idea",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

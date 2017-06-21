@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "normal": {
+            "model": "wsc:redstone_switch"
+        }
+    }
+}

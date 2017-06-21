@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "particle": "wsc:blocks/redstone_controller/up",
+        "up": "wsc:blocks/redstone_controller/up",
+        "down": "wsc:blocks/redstone_controller/down",
+        "east": "wsc:blocks/redstone_controller/side",
+        "west": "wsc:blocks/redstone_controller/side",
+        "north": "wsc:blocks/redstone_controller/side",
+        "south": "wsc:blocks/redstone_controller/side"
+    }
+}
