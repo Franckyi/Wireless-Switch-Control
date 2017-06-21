@@ -4,15 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.github.franckyi.wsc.capability.Capabilities;
-import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
-import com.github.franckyi.wsc.capability.controllercap.IController;
 import com.github.franckyi.wsc.capability.linkcap.ILink;
-import com.github.franckyi.wsc.capability.linkcap.LinkProvider;
-import com.github.franckyi.wsc.capability.switchcap.ISwitch;
-import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.network.ControllerDataMessage;
-import com.github.franckyi.wsc.network.SwitchDataMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityController;
 import com.github.franckyi.wsc.util.ChatUtil;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
@@ -54,7 +48,7 @@ public class BlockRedstoneController extends Block {
 			List<MasterLogicalSwitch> list = Capabilities.getControllerSwitches(worldIn, pos);
 			if (playerIn.isSneaking()) {
 				ILink link = Capabilities.getLink(playerIn);
-				if(link.isPresent()) {
+				if (link.isPresent()) {
 					for (MasterLogicalSwitch mls : list)
 						if (mls.getPos().equals(link.getSwitch().getPos())) {
 							ChatUtil.sendError(playerIn, "The switch is already linked to this controller !");
@@ -73,7 +67,8 @@ public class BlockRedstoneController extends Block {
 					ChatUtil.sendError(playerIn, "You must select a switch first.");
 
 			} else
-				PacketHandler.INSTANCE.sendTo(new ControllerDataMessage(Side.SERVER, list, pos), (EntityPlayerMP) playerIn);
+				PacketHandler.INSTANCE.sendTo(new ControllerDataMessage(Side.SERVER, list, pos),
+						(EntityPlayerMP) playerIn);
 		}
 		return true;
 	}
@@ -97,7 +92,8 @@ public class BlockRedstoneController extends Block {
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		TileEntityController te = world.getTileEntity(pos) instanceof TileEntityController
-				? (TileEntityController) world.getTileEntity(pos) : null;
+				? (TileEntityController) world.getTileEntity(pos)
+				: null;
 		if (te != null)
 			return Arrays.asList(tileEntityToItemStack(new ItemStack(state.getBlock()), te));
 		return super.getDrops(world, pos, state, fortune);

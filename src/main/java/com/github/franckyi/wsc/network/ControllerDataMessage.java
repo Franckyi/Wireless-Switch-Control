@@ -5,9 +5,6 @@ import java.util.List;
 
 import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.Capabilities;
-import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
-import com.github.franckyi.wsc.capability.linkcap.LinkProvider;
-import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
 import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
@@ -36,7 +33,7 @@ public class ControllerDataMessage implements IMessage {
 		this.switches = switches;
 		this.pos = pos;
 	}
-	
+
 	public ControllerDataMessage() {
 	}
 
@@ -87,13 +84,17 @@ public class ControllerDataMessage implements IMessage {
 					@Override
 					public void run() {
 						Capabilities.setControllerSwitches(p.world, message.pos, message.switches);
-						for (MasterLogicalSwitch updatedControllerSwitch : Capabilities.getControllerSwitches(p.world, message.pos)) {
-							Capabilities.updateSwitch(p.world, updatedControllerSwitch.getPos(), updatedControllerSwitch);
-							SlaveLogicalSwitch updatedSwitchBlock = Capabilities.getSwitch(p.world, updatedControllerSwitch.getPos());
-							for (BlockPos pos :  updatedSwitchBlock.getControllers()) {
+						for (MasterLogicalSwitch updatedControllerSwitch : Capabilities.getControllerSwitches(p.world,
+								message.pos)) {
+							Capabilities.updateSwitch(p.world, updatedControllerSwitch.getPos(),
+									updatedControllerSwitch);
+							SlaveLogicalSwitch updatedSwitchBlock = Capabilities.getSwitch(p.world,
+									updatedControllerSwitch.getPos());
+							for (BlockPos pos : updatedSwitchBlock.getControllers()) {
 								List<MasterLogicalSwitch> ss = Capabilities.getControllerSwitches(p.world, pos);
-								for (MasterLogicalSwitch oldControllerSwitch : Capabilities.getControllerSwitches(p.world, pos)) {
-									if(oldControllerSwitch.getPos().equals(updatedControllerSwitch.getPos())) {
+								for (MasterLogicalSwitch oldControllerSwitch : Capabilities
+										.getControllerSwitches(p.world, pos)) {
+									if (oldControllerSwitch.getPos().equals(updatedControllerSwitch.getPos())) {
 										ss.set(ss.indexOf(oldControllerSwitch), updatedControllerSwitch);
 										Capabilities.updateTileEntity(p.world, updatedControllerSwitch.getPos());
 										break;

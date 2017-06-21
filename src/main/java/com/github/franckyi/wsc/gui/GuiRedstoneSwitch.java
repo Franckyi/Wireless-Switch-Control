@@ -16,7 +16,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 
 	private SlaveLogicalSwitch sls;
 	private BlockPos pos;
-	
+
 	private GuiTextField name;
 	private GuiOnOffButton enabled;
 	private GuiIntTextField power;
@@ -31,8 +31,9 @@ public class GuiRedstoneSwitch extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(fontRenderer, "Redstone Switch", width / 2, 20, 0xffffff);
-		if(sls.isLinked())
-			this.drawCenteredString(fontRenderer, "This switch is linked to " + sls.getControllers().size() + " controller" + ((sls.getControllers().size() > 1) ? "s." : "."), width / 2, 50, 0x55FF55);
+		if (sls.isLinked())
+			this.drawCenteredString(fontRenderer, "This switch is linked to " + sls.getControllers().size()
+					+ " controller" + ((sls.getControllers().size() > 1) ? "s." : "."), width / 2, 50, 0x55FF55);
 		else
 			this.drawCenteredString(fontRenderer, "This switch isn't linked to a controller.", width / 2, 50, 0xFF5555);
 		this.drawString(fontRenderer, "Name :", width / 2 - 80, height / 2 - 28, 0xffffff);
@@ -50,22 +51,22 @@ public class GuiRedstoneSwitch extends GuiScreen {
 		buttonList.add(enabled = new GuiOnOffButton(2, width / 2 + 15, height / 2 - 10, sls.isEnabled()));
 		power = new GuiIntTextField(1, fontRenderer, width / 2 + 20, height / 2 + 15, 20, 20, 15);
 		power.setText(sls.getPower() + "");
-		buttonList.add(cancel = new GuiButton(3, width/2 - 100, height - 40, 90, 20, "§cCancel"));
-		buttonList.add(done = new GuiButton(4, width/2 + 10, height - 40, 90, 20, "§aDone"));
+		buttonList.add(cancel = new GuiButton(3, width / 2 - 100, height - 40, 90, 20, "§cCancel"));
+		buttonList.add(done = new GuiButton(4, width / 2 + 10, height - 40, 90, 20, "§aDone"));
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if(button == done) {
+		if (button == done) {
 			sls.setName(name.getText());
 			sls.setPower(power.getInt());
 			sls.setEnabled(enabled.value());
 			PacketHandler.INSTANCE.sendToServer(new SwitchDataMessage(Side.CLIENT, sls, pos));
 		}
-		if(button == done || button == cancel) {
+		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);
 			if (this.mc.currentScreen == null)
-	            this.mc.setIngameFocus();
+				this.mc.setIngameFocus();
 		}
 	}
 

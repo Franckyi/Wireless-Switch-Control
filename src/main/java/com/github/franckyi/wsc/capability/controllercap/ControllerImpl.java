@@ -5,7 +5,7 @@ import java.util.List;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 
 public class ControllerImpl implements IController {
-	
+
 	private List<MasterLogicalSwitch> switches;
 
 	@Override

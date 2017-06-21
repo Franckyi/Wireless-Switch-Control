@@ -11,7 +11,7 @@ public class MasterLogicalSwitch extends BaseLogicalSwitch {
 		super(linked, name, enabled, power);
 		this.pos = pos;
 	}
-	
+
 	public MasterLogicalSwitch(BaseLogicalSwitch ls, BlockPos pos) {
 		super(ls.isLinked(), ls.getName(), ls.isEnabled(), ls.getPower());
 		this.pos = pos;
@@ -42,7 +42,5 @@ public class MasterLogicalSwitch extends BaseLogicalSwitch {
 		c.setInteger("z", getPos().getZ());
 		return c;
 	}
-	
-	
 
 }

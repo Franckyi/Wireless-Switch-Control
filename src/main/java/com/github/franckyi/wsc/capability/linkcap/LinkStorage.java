@@ -18,7 +18,7 @@ public class LinkStorage implements IStorage<ILink> {
 			c.setBoolean("present", true);
 		} else
 			c = new NBTTagCompound();
-			c.setBoolean("present", false);
+		c.setBoolean("present", false);
 		return c;
 	}
 

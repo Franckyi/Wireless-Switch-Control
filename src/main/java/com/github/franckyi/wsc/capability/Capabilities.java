@@ -3,10 +3,8 @@ package com.github.franckyi.wsc.capability;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
 import com.github.franckyi.wsc.capability.linkcap.ILink;
 import com.github.franckyi.wsc.capability.linkcap.LinkProvider;
-import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
 import com.github.franckyi.wsc.tileentity.TileEntityController;
 import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
 import com.github.franckyi.wsc.util.BaseLogicalSwitch;
@@ -17,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class Capabilities {
 

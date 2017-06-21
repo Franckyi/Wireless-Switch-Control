@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.Capabilities;
-import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
-import com.github.franckyi.wsc.capability.linkcap.LinkProvider;
-import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
 import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 import com.github.franckyi.wsc.util.SlaveLogicalSwitch;

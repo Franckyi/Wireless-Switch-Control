@@ -60,12 +60,12 @@ public class UnlinkingMessage implements IMessage {
 							toRemove = mls;
 							break;
 						}
-					if(toRemove != null)
+					if (toRemove != null)
 						switches.remove(toRemove);
 					Capabilities.setControllerSwitches(world, message.pos, switches);
 					SlaveLogicalSwitch sls = Capabilities.getSwitch(world, message.mls.getPos());
 					sls.getControllers().remove(message.pos);
-					if(sls.getControllers().isEmpty())
+					if (sls.getControllers().isEmpty())
 						sls.setLinked(false);
 					Capabilities.setSwitch(world, message.mls.getPos(), sls);
 				}

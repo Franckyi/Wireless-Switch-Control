@@ -89,8 +89,10 @@ public class RegisterUtil {
 	private static void registerMessages() {
 		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 0, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 1, Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 2, Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 3, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 2,
+				Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 3,
+				Side.SERVER);
 		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, UnlinkingMessage.class, 4, Side.SERVER);
 	}
 

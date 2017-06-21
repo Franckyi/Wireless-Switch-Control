@@ -1,18 +1,12 @@
 package com.github.franckyi.wsc.tileentity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
 import com.github.franckyi.wsc.capability.controllercap.IController;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityController extends TileEntity {
@@ -20,7 +14,7 @@ public class TileEntityController extends TileEntity {
 	public TileEntityController() {
 		setSwitches(new ArrayList<MasterLogicalSwitch>());
 		markDirty();
-		
+
 	}
 
 	public List<MasterLogicalSwitch> getSwitches() {

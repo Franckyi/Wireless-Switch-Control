@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiButton;
 public class GuiOnOffButton extends GuiButton {
 
 	private boolean on;
-	
+
 	public GuiOnOffButton(int buttonId, int x, int y, boolean on) {
 		super(buttonId, x, y, 30, 20, on ? "§aON" : "§cOFF");
 		this.on = on;
@@ -22,7 +22,8 @@ public class GuiOnOffButton extends GuiButton {
 
 	@Override
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-		if(this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height) {
+		if (this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width
+				&& mouseY < this.y + this.height) {
 			on = !on;
 			displayString = on ? "§aON" : "§cOFF";
 		}
@@ -31,7 +32,7 @@ public class GuiOnOffButton extends GuiButton {
 
 	public void setOnAction(Object object) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

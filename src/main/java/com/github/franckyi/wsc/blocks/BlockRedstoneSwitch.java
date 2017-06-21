@@ -12,9 +12,6 @@ import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +42,7 @@ public class BlockRedstoneSwitch extends Block {
 	@Override
 	public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		BaseLogicalSwitch bls = Capabilities.getSwitch(world, pos);
-		if(bls.isEnabled())
+		if (bls.isEnabled())
 			return bls.getPower();
 		return 0;
 	}
@@ -57,7 +54,7 @@ public class BlockRedstoneSwitch extends Block {
 
 	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return Capabilities.getSwitch(world, pos).isEnabled();
+		return true;
 	}
 
 	@Override
