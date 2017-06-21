@@ -16,11 +16,12 @@ import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class Capabilities {
 
-	public static List<MasterLogicalSwitch> getControllerSwitches(World world, BlockPos pos) {
+	public static List<MasterLogicalSwitch> getControllerSwitches(IBlockAccess world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityController)
 			return ((TileEntityController) te).getSwitches();
@@ -31,7 +32,7 @@ public class Capabilities {
 		return player.getCapability(LinkProvider.LINK_CAP, null);
 	}
 
-	public static SlaveLogicalSwitch getSwitch(World world, BlockPos pos) {
+	public static SlaveLogicalSwitch getSwitch(IBlockAccess world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntitySwitch) {
 			SlaveLogicalSwitch sls = ((TileEntitySwitch) te).getSwitch();
@@ -40,7 +41,7 @@ public class Capabilities {
 		return null;
 	}
 
-	public static void setControllerSwitches(World world, BlockPos pos, List<MasterLogicalSwitch> switches) {
+	public static void setControllerSwitches(IBlockAccess world, BlockPos pos, List<MasterLogicalSwitch> switches) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityController) {
 			((TileEntityController) te).setSwitches(switches);
@@ -48,7 +49,7 @@ public class Capabilities {
 		}
 	}
 
-	public static void setSwitch(World world, BlockPos pos, SlaveLogicalSwitch sls) {
+	public static void setSwitch(IBlockAccess world, BlockPos pos, SlaveLogicalSwitch sls) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntitySwitch) {
 			((TileEntitySwitch) te).setSwitch(sls);
@@ -56,11 +57,11 @@ public class Capabilities {
 		}
 	}
 
-	public static void updateTileEntity(World world, BlockPos pos) {
+	public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
 		world.getTileEntity(pos).markDirty();
 	}
 
-	public static void updateSwitch(World world, BlockPos pos, BaseLogicalSwitch ls1) {
+	public static void updateSwitch(IBlockAccess world, BlockPos pos, BaseLogicalSwitch ls1) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntitySwitch) {
 			SlaveLogicalSwitch sls = ((TileEntitySwitch) te).getSwitch();

@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntitySwitch extends TileEntity {
 
@@ -37,5 +38,14 @@ public class TileEntitySwitch extends TileEntity {
 		if (s != null)
 			s.setSwitch(sls);
 	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if(world != null)
+			world.notifyNeighborsOfStateChange(pos, blockType, false);
+	}
+	
+	
 
 }
