@@ -18,8 +18,6 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityController extends TileEntity {
 
 	public TileEntityController() {
-		WSCMod.LOGGER.info("controller");
-		WSCMod.LOGGER.info(getCapability(ControllerProvider.CONTROLLER_CAP, null) != null);
 		setSwitches(new ArrayList<MasterLogicalSwitch>());
 		markDirty();
 		

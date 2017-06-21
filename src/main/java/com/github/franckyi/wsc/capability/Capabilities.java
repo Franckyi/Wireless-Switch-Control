@@ -33,8 +33,10 @@ public class Capabilities {
 
 	public static SlaveLogicalSwitch getSwitch(World world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntitySwitch)
-			return ((TileEntitySwitch) te).getSwitch();
+		if (te != null && te instanceof TileEntitySwitch) {
+			SlaveLogicalSwitch sls = ((TileEntitySwitch) te).getSwitch();
+			return sls;
+		}
 		return null;
 	}
 
@@ -61,11 +63,8 @@ public class Capabilities {
 	public static void updateSwitch(World world, BlockPos pos, BaseLogicalSwitch ls1) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntitySwitch) {
-			BaseLogicalSwitch ls = ((TileEntitySwitch) te).getSwitch();
-			ls.setLinked(ls1.isEnabled());
-			ls.setName(ls1.getName());
-			ls.setEnabled(ls1.isEnabled());
-			ls.setPower(ls1.getPower());
+			SlaveLogicalSwitch sls = ((TileEntitySwitch) te).getSwitch();
+			((TileEntitySwitch) te).setSwitch(new SlaveLogicalSwitch(ls1, sls.getControllers()));
 			updateTileEntity(world, pos);
 		}
 	}

@@ -21,8 +21,6 @@ import net.minecraft.util.math.BlockPos;
 public class TileEntitySwitch extends TileEntity {
 
 	public TileEntitySwitch() {
-		WSCMod.LOGGER.info("switch");
-		WSCMod.LOGGER.info(getSwitch() != null);
 		setSwitch(new SlaveLogicalSwitch(false, "default", false, 0, new HashSet<BlockPos>()));
 		markDirty();
 	}

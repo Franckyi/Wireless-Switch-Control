@@ -61,6 +61,7 @@ public class BlockRedstoneController extends Block {
 							return true;
 						}
 					if (list.size() < 4) {
+						link.getSwitch().setLinked(true);
 						list.add(link.getSwitch());
 						Capabilities.getSwitch(worldIn, link.getSwitch().getPos()).getControllers().add(pos);
 						Capabilities.getSwitch(worldIn, link.getSwitch().getPos()).setLinked(true);

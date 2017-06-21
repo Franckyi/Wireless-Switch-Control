@@ -1,5 +1,6 @@
 package com.github.franckyi.wsc.handlers;
 
+import com.github.franckyi.wsc.capability.Capabilities;
 import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
 import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
 import com.github.franckyi.wsc.gui.GuiRedstoneController;
@@ -24,9 +25,9 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
     	BlockPos pos = new BlockPos(x, y, z);
     	if (ID == REDSTONE_CONTROLLER_GUI)
-            return new GuiRedstoneController(world.getTileEntity(pos).getCapability(ControllerProvider.CONTROLLER_CAP, null).getSwitches(), pos);
+            return new GuiRedstoneController(Capabilities.getControllerSwitches(world, pos), pos);
     	else if (ID == REDSTONE_SWITCH_GUI)
-    		return new GuiRedstoneSwitch(world.getTileEntity(pos).getCapability(SwitchProvider.SWITCH_CAP, null).getSwitch(), pos);
+    		return new GuiRedstoneSwitch(Capabilities.getSwitch(world, pos), pos);
     	return null;
     }
 }

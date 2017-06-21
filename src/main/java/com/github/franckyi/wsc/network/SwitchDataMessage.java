@@ -1,5 +1,7 @@
 package com.github.franckyi.wsc.network;
 
+import java.util.List;
+
 import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.Capabilities;
 import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
@@ -78,9 +80,10 @@ public class SwitchDataMessage implements IMessage {
 					public void run() {
 						Capabilities.setSwitch(p.world, message.pos, message.sls);
 						for (BlockPos pos : Capabilities.getSwitch(p.world, message.pos).getControllers()) {
-							for (MasterLogicalSwitch mls : Capabilities.getControllerSwitches(p.world, pos)) {
+							List<MasterLogicalSwitch> list = Capabilities.getControllerSwitches(p.world, pos);
+							for (MasterLogicalSwitch mls : list) {
 								if (mls.getPos().equals(message.pos)) {
-									mls = new MasterLogicalSwitch(message.sls, pos);
+									list.set(list.indexOf(mls), new MasterLogicalSwitch(message.sls, message.pos));
 									Capabilities.updateTileEntity(p.world, pos);
 									break;
 								}
