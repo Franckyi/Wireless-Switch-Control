@@ -13,14 +13,14 @@ public class ChatUtil {
 				ChatFormatting.RED + "[" + ModReference.MODID.toUpperCase() + "] " + message + ChatFormatting.RESET));
 	}
 
-	public static void sendSuccess(EntityPlayer player, String message) {
-		player.sendMessage(new TextComponentString(
-				ChatFormatting.GREEN + "[" + ModReference.MODID.toUpperCase() + "] " + message + ChatFormatting.RESET));
-	}
-
 	public static void sendInfo(EntityPlayer player, String message) {
 		player.sendMessage(new TextComponentString(
 				ChatFormatting.BLUE + "[" + ModReference.MODID.toUpperCase() + "] " + message + ChatFormatting.RESET));
+	}
+
+	public static void sendSuccess(EntityPlayer player, String message) {
+		player.sendMessage(new TextComponentString(
+				ChatFormatting.GREEN + "[" + ModReference.MODID.toUpperCase() + "] " + message + ChatFormatting.RESET));
 	}
 
 }

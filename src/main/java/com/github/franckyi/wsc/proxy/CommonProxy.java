@@ -13,16 +13,16 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class CommonProxy {
 
-	public void preInit(FMLPreInitializationEvent e) {
-		RegisterUtil.registerPreInit(e);
-	}
-
 	public void init(FMLInitializationEvent e) {
 		RegisterUtil.registerInit(e);
 		NetworkRegistry.INSTANCE.registerGuiHandler(WSCMod.instance, new GuiHandler());
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
+	}
+
+	public void preInit(FMLPreInitializationEvent e) {
+		RegisterUtil.registerPreInit(e);
 	}
 
 	public void serverStarting(FMLServerStartingEvent e) {

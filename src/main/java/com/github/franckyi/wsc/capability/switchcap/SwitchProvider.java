@@ -14,8 +14,8 @@ public class SwitchProvider implements ICapabilitySerializable<NBTBase> {
 	private ISwitch instance = SWITCH_CAP.getDefaultInstance();
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == SWITCH_CAP;
+	public void deserializeNBT(NBTBase nbt) {
+		SWITCH_CAP.getStorage().readNBT(SWITCH_CAP, this.instance, null, nbt);
 	}
 
 	@Override
@@ -24,13 +24,13 @@ public class SwitchProvider implements ICapabilitySerializable<NBTBase> {
 	}
 
 	@Override
-	public NBTBase serializeNBT() {
-		return SWITCH_CAP.getStorage().writeNBT(SWITCH_CAP, this.instance, null);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == SWITCH_CAP;
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt) {
-		SWITCH_CAP.getStorage().readNBT(SWITCH_CAP, this.instance, null, nbt);
+	public NBTBase serializeNBT() {
+		return SWITCH_CAP.getStorage().writeNBT(SWITCH_CAP, this.instance, null);
 	}
 
 }

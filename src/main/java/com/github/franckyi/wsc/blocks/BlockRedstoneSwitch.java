@@ -4,11 +4,12 @@ import com.github.franckyi.wsc.capability.Capabilities;
 import com.github.franckyi.wsc.capability.linkcap.ILink;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.network.SwitchDataMessage;
+import com.github.franckyi.wsc.network.UnlinkingMessage;
 import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
-import com.github.franckyi.wsc.util.BaseLogicalSwitch;
 import com.github.franckyi.wsc.util.ChatUtil;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -40,16 +41,13 @@ public class BlockRedstoneSwitch extends Block {
 	}
 
 	@Override
-	public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		BaseLogicalSwitch bls = Capabilities.getSwitch(world, pos);
-		if (bls.isEnabled())
-			return bls.getPower();
-		return 0;
-	}
-
-	@Override
-	public boolean canProvidePower(IBlockState state) {
-		return true;
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(world, pos);
+		if (osls.isPresent())
+			for (BlockPos controller : Capabilities.getSwitch(world, pos).get().getControllers())
+				PacketHandler.INSTANCE.sendToServer(new UnlinkingMessage(pos, controller));
+		super.breakBlock(world, pos, state);
+		world.removeTileEntity(pos);
 	}
 
 	@Override
@@ -58,29 +56,21 @@ public class BlockRedstoneSwitch extends Block {
 	}
 
 	@Override
-	public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return false;
-	}
-
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
-			SlaveLogicalSwitch sls = Capabilities.getSwitch(worldIn, pos);
-			if (playerIn.isSneaking()) {
-				ILink link = Capabilities.getLink(playerIn);
-				link.setSwitch(new MasterLogicalSwitch(sls, pos));
-				ChatUtil.sendInfo(playerIn, "Switch selected.");
-			} else
-				PacketHandler.INSTANCE.sendTo(new SwitchDataMessage(Side.SERVER, sls, pos), (EntityPlayerMP) playerIn);
-		}
+	public boolean canProvidePower(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		super.breakBlock(world, pos, state);
-		world.removeTileEntity(pos);
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntitySwitch();
+	}
+
+	@Override
+	public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		Optional<SlaveLogicalSwitch> bls = Capabilities.getSwitch(world, pos);
+		if (bls.isPresent() && bls.get().isEnabled())
+			return bls.get().getPower();
+		return 0;
 	}
 
 	@Override
@@ -89,8 +79,27 @@ public class BlockRedstoneSwitch extends Block {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntitySwitch();
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!worldIn.isRemote) {
+			Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(worldIn, pos);
+			if (osls.isPresent()) {
+				if (playerIn.isSneaking()) {
+					ILink link = Capabilities.getLink(playerIn);
+					link.setSwitch(new MasterLogicalSwitch(osls.get(), pos));
+					ChatUtil.sendInfo(playerIn, "Switch selected.");
+				} else
+					PacketHandler.INSTANCE.sendTo(new SwitchDataMessage(Side.SERVER, osls.get(), pos),
+							(EntityPlayerMP) playerIn);
+			} else
+				ChatUtil.sendError(playerIn, "Unable to access the Capability.");
+		}
+		return true;
+	}
+
+	@Override
+	public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
 	}
 
 }

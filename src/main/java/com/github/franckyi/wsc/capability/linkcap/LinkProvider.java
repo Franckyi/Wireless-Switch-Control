@@ -14,8 +14,8 @@ public class LinkProvider implements ICapabilitySerializable<NBTBase> {
 	private ILink instance = LINK_CAP.getDefaultInstance();
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == LINK_CAP;
+	public void deserializeNBT(NBTBase nbt) {
+		LINK_CAP.getStorage().readNBT(LINK_CAP, this.instance, null, nbt);
 	}
 
 	@Override
@@ -24,13 +24,13 @@ public class LinkProvider implements ICapabilitySerializable<NBTBase> {
 	}
 
 	@Override
-	public NBTBase serializeNBT() {
-		return LINK_CAP.getStorage().writeNBT(LINK_CAP, this.instance, null);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == LINK_CAP;
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt) {
-		LINK_CAP.getStorage().readNBT(LINK_CAP, this.instance, null, nbt);
+	public NBTBase serializeNBT() {
+		return LINK_CAP.getStorage().writeNBT(LINK_CAP, this.instance, null);
 	}
 
 }

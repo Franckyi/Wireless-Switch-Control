@@ -12,14 +12,6 @@ public class GuiOnOffButton extends GuiButton {
 		this.on = on;
 	}
 
-	public boolean value() {
-		return on;
-	}
-
-	public void set(boolean on) {
-		this.on = on;
-	}
-
 	@Override
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 		if (this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width
@@ -30,9 +22,12 @@ public class GuiOnOffButton extends GuiButton {
 		return super.mousePressed(mc, mouseX, mouseY);
 	}
 
-	public void setOnAction(Object object) {
-		// TODO Auto-generated method stub
+	public void set(boolean on) {
+		this.on = on;
+	}
 
+	public boolean value() {
+		return on;
 	}
 
 }

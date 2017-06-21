@@ -25,11 +25,6 @@ public class WSCMod {
 	public static CommonProxy proxy;
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent e) {
-		proxy.preInit(e);
-	}
-
-	@EventHandler
 	public void init(FMLInitializationEvent e) {
 		proxy.init(e);
 	}
@@ -37,6 +32,11 @@ public class WSCMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 		proxy.postInit(e);
+	}
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent e) {
+		proxy.preInit(e);
 	}
 
 }

@@ -10,6 +10,7 @@ import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
 import com.github.franckyi.wsc.util.BaseLogicalSwitch;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.google.common.base.Optional;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -29,13 +30,13 @@ public class Capabilities {
 		return player.getCapability(LinkProvider.LINK_CAP, null);
 	}
 
-	public static SlaveLogicalSwitch getSwitch(IBlockAccess world, BlockPos pos) {
+	public static Optional<SlaveLogicalSwitch> getSwitch(IBlockAccess world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntitySwitch) {
 			SlaveLogicalSwitch sls = ((TileEntitySwitch) te).getSwitch();
-			return sls;
+			return Optional.of(sls);
 		}
-		return null;
+		return Optional.absent();
 	}
 
 	public static void setControllerSwitches(IBlockAccess world, BlockPos pos, List<MasterLogicalSwitch> switches) {
@@ -54,10 +55,6 @@ public class Capabilities {
 		}
 	}
 
-	public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
-		world.getTileEntity(pos).markDirty();
-	}
-
 	public static void updateSwitch(IBlockAccess world, BlockPos pos, BaseLogicalSwitch ls1) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntitySwitch) {
@@ -65,6 +62,10 @@ public class Capabilities {
 			((TileEntitySwitch) te).setSwitch(new SlaveLogicalSwitch(ls1, sls.getControllers()));
 			updateTileEntity(world, pos);
 		}
+	}
+
+	public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
+		world.getTileEntity(pos).markDirty();
 	}
 
 }

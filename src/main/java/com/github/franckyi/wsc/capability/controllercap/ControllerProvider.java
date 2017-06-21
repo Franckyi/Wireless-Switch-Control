@@ -14,8 +14,8 @@ public class ControllerProvider implements ICapabilitySerializable<NBTBase> {
 	private IController instance = CONTROLLER_CAP.getDefaultInstance();
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CONTROLLER_CAP;
+	public void deserializeNBT(NBTBase nbt) {
+		CONTROLLER_CAP.getStorage().readNBT(CONTROLLER_CAP, this.instance, null, nbt);
 	}
 
 	@Override
@@ -24,13 +24,13 @@ public class ControllerProvider implements ICapabilitySerializable<NBTBase> {
 	}
 
 	@Override
-	public NBTBase serializeNBT() {
-		return CONTROLLER_CAP.getStorage().writeNBT(CONTROLLER_CAP, this.instance, null);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CONTROLLER_CAP;
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt) {
-		CONTROLLER_CAP.getStorage().readNBT(CONTROLLER_CAP, this.instance, null, nbt);
+	public NBTBase serializeNBT() {
+		return CONTROLLER_CAP.getStorage().writeNBT(CONTROLLER_CAP, this.instance, null);
 	}
 
 }

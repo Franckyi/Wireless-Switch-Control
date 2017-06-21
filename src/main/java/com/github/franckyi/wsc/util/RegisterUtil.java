@@ -36,18 +36,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class RegisterUtil {
 
-	public static void registerPreInit(FMLPreInitializationEvent e) {
-		registerBlocks(e, ModBlocks.REDSTONE_CONTROLLER, ModBlocks.REDSTONE_SWITCH);
-		registerItems(e);
-		registerTileEntities();
-		registerCapabilities();
-	}
-
-	public static void registerInit(FMLInitializationEvent e) {
-		registerEventHandlers();
-		registerMessages();
-	}
-
 	private static void registerBlocks(FMLPreInitializationEvent e, Block... blocks) {
 		for (Block block : blocks) {
 			final ItemBlock itemblock = new ItemBlock(block);
@@ -58,21 +46,6 @@ public class RegisterUtil {
 						new ModelResourceLocation(block.getRegistryName(), "inventory"));
 			}
 		}
-	}
-
-	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
-		for (Item item : items) {
-			if (e.getSide() == Side.CLIENT) {
-				GameRegistry.register(item);
-				ModelLoader.setCustomModelResourceLocation(item, 0,
-						new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			}
-		}
-	}
-
-	private static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityController.class, "controller_tile_entity");
-		GameRegistry.registerTileEntity(TileEntitySwitch.class, "switch_tile_entity");
 	}
 
 	private static void registerCapabilities() {
@@ -86,6 +59,21 @@ public class RegisterUtil {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
+	public static void registerInit(FMLInitializationEvent e) {
+		registerEventHandlers();
+		registerMessages();
+	}
+
+	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
+		for (Item item : items) {
+			if (e.getSide() == Side.CLIENT) {
+				GameRegistry.register(item);
+				ModelLoader.setCustomModelResourceLocation(item, 0,
+						new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			}
+		}
+	}
+
 	private static void registerMessages() {
 		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 0, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 1, Side.SERVER);
@@ -94,6 +82,18 @@ public class RegisterUtil {
 		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 3,
 				Side.SERVER);
 		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, UnlinkingMessage.class, 4, Side.SERVER);
+	}
+
+	public static void registerPreInit(FMLPreInitializationEvent e) {
+		registerBlocks(e, ModBlocks.REDSTONE_CONTROLLER, ModBlocks.REDSTONE_SWITCH);
+		registerItems(e);
+		registerTileEntities();
+		registerCapabilities();
+	}
+
+	private static void registerTileEntities() {
+		GameRegistry.registerTileEntity(TileEntityController.class, "controller_tile_entity");
+		GameRegistry.registerTileEntity(TileEntitySwitch.class, "switch_tile_entity");
 	}
 
 }

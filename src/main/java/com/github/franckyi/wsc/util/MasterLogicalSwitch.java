@@ -7,9 +7,7 @@ public class MasterLogicalSwitch extends BaseLogicalSwitch {
 
 	private BlockPos pos;
 
-	public MasterLogicalSwitch(boolean linked, String name, boolean enabled, int power, BlockPos pos) {
-		super(linked, name, enabled, power);
-		this.pos = pos;
+	public MasterLogicalSwitch() {
 	}
 
 	public MasterLogicalSwitch(BaseLogicalSwitch ls, BlockPos pos) {
@@ -17,21 +15,23 @@ public class MasterLogicalSwitch extends BaseLogicalSwitch {
 		this.pos = pos;
 	}
 
-	public MasterLogicalSwitch() {
+	public MasterLogicalSwitch(boolean linked, String name, boolean enabled, int power, BlockPos pos) {
+		super(linked, name, enabled, power);
+		this.pos = pos;
 	}
 
 	public BlockPos getPos() {
 		return pos;
 	}
 
-	public void setPos(BlockPos pos) {
-		this.pos = pos;
-	}
-
 	@Override
 	public void read(NBTTagCompound c) {
 		super.read(c);
 		setPos(new BlockPos(c.getInteger("x"), c.getInteger("y"), c.getInteger("z")));
+	}
+
+	public void setPos(BlockPos pos) {
+		this.pos = pos;
 	}
 
 	@Override

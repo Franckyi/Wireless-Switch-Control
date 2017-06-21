@@ -13,9 +13,7 @@ public class SlaveLogicalSwitch extends BaseLogicalSwitch {
 
 	private Set<BlockPos> controllers;
 
-	public SlaveLogicalSwitch(boolean linked, String name, boolean enabled, int power, Set<BlockPos> controllers) {
-		super(linked, name, enabled, power);
-		this.controllers = controllers;
+	public SlaveLogicalSwitch() {
 	}
 
 	public SlaveLogicalSwitch(BaseLogicalSwitch ls, Set<BlockPos> controllers) {
@@ -23,15 +21,13 @@ public class SlaveLogicalSwitch extends BaseLogicalSwitch {
 		this.controllers = controllers;
 	}
 
-	public SlaveLogicalSwitch() {
+	public SlaveLogicalSwitch(boolean linked, String name, boolean enabled, int power, Set<BlockPos> controllers) {
+		super(linked, name, enabled, power);
+		this.controllers = controllers;
 	}
 
 	public Set<BlockPos> getControllers() {
 		return controllers;
-	}
-
-	public void setControllers(Set<BlockPos> controllers) {
-		this.controllers = controllers;
 	}
 
 	@Override
@@ -43,6 +39,10 @@ public class SlaveLogicalSwitch extends BaseLogicalSwitch {
 			NBTTagCompound c2 = (NBTTagCompound) i.next();
 			controllers.add(new BlockPos(c2.getInteger("x"), c2.getInteger("y"), c2.getInteger("z")));
 		}
+	}
+
+	public void setControllers(Set<BlockPos> controllers) {
+		this.controllers = controllers;
 	}
 
 	@Override

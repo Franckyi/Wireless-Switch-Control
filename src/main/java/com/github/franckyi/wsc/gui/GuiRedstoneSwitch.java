@@ -28,6 +28,21 @@ public class GuiRedstoneSwitch extends GuiScreen {
 	}
 
 	@Override
+	protected void actionPerformed(GuiButton button) throws IOException {
+		if (button == done) {
+			sls.setName(name.getText());
+			sls.setPower(power.getInt());
+			sls.setEnabled(enabled.value());
+			PacketHandler.INSTANCE.sendToServer(new SwitchDataMessage(Side.CLIENT, sls, pos));
+		}
+		if (button == done || button == cancel) {
+			mc.displayGuiScreen(null);
+			if (this.mc.currentScreen == null)
+				this.mc.setIngameFocus();
+		}
+	}
+
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(fontRenderer, "Redstone Switch", width / 2, 20, 0xffffff);
@@ -53,21 +68,6 @@ public class GuiRedstoneSwitch extends GuiScreen {
 		power.setText(sls.getPower() + "");
 		buttonList.add(cancel = new GuiButton(3, width / 2 - 100, height - 40, 90, 20, "§cCancel"));
 		buttonList.add(done = new GuiButton(4, width / 2 + 10, height - 40, 90, 20, "§aDone"));
-	}
-
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		if (button == done) {
-			sls.setName(name.getText());
-			sls.setPower(power.getInt());
-			sls.setEnabled(enabled.value());
-			PacketHandler.INSTANCE.sendToServer(new SwitchDataMessage(Side.CLIENT, sls, pos));
-		}
-		if (button == done || button == cancel) {
-			mc.displayGuiScreen(null);
-			if (this.mc.currentScreen == null)
-				this.mc.setIngameFocus();
-		}
 	}
 
 	@Override

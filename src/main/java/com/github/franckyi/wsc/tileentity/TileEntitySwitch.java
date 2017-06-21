@@ -1,6 +1,7 @@
 package com.github.franckyi.wsc.tileentity;
 
 import java.util.HashSet;
+
 import com.github.franckyi.wsc.capability.switchcap.ISwitch;
 import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
 import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
@@ -22,17 +23,17 @@ public class TileEntitySwitch extends TileEntity {
 		return null;
 	}
 
-	public void setSwitch(SlaveLogicalSwitch sls) {
-		ISwitch s = getCapability(SwitchProvider.SWITCH_CAP, null);
-		if (s != null)
-			s.setSwitch(sls);
-	}
-
 	@Override
 	public void markDirty() {
 		super.markDirty();
 		if (world != null)
 			world.notifyNeighborsOfStateChange(pos, blockType, false);
+	}
+
+	public void setSwitch(SlaveLogicalSwitch sls) {
+		ISwitch s = getCapability(SwitchProvider.SWITCH_CAP, null);
+		if (s != null)
+			s.setSwitch(sls);
 	}
 
 }

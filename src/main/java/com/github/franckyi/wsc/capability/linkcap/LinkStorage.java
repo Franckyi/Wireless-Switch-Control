@@ -11,6 +11,17 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 public class LinkStorage implements IStorage<ILink> {
 
 	@Override
+	public void readNBT(Capability<ILink> capability, ILink instance, EnumFacing side, NBTBase nbt) {
+		NBTTagCompound c = (NBTTagCompound) nbt;
+		if (c.getBoolean("present")) {
+			MasterLogicalSwitch mls = new MasterLogicalSwitch();
+			mls.read(c);
+			instance.setSwitch(mls);
+		} else
+			instance.clear();
+	}
+
+	@Override
 	public NBTBase writeNBT(Capability<ILink> capability, ILink instance, EnumFacing side) {
 		NBTTagCompound c;
 		if (instance.isPresent()) {
@@ -20,17 +31,6 @@ public class LinkStorage implements IStorage<ILink> {
 			c = new NBTTagCompound();
 		c.setBoolean("present", false);
 		return c;
-	}
-
-	@Override
-	public void readNBT(Capability<ILink> capability, ILink instance, EnumFacing side, NBTBase nbt) {
-		NBTTagCompound c = (NBTTagCompound) nbt;
-		if (c.getBoolean("present")) {
-			MasterLogicalSwitch mls = new MasterLogicalSwitch();
-			mls.read(c);
-			instance.setSwitch(mls);
-		} else
-			instance.clear();
 	}
 
 }

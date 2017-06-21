@@ -9,13 +9,13 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 public class SwitchStorage implements IStorage<ISwitch> {
 
 	@Override
-	public NBTBase writeNBT(Capability<ISwitch> capability, ISwitch instance, EnumFacing side) {
-		return instance.getSwitch().write();
+	public void readNBT(Capability<ISwitch> capability, ISwitch instance, EnumFacing side, NBTBase nbt) {
+		instance.getSwitch().read((NBTTagCompound) nbt);
 	}
 
 	@Override
-	public void readNBT(Capability<ISwitch> capability, ISwitch instance, EnumFacing side, NBTBase nbt) {
-		instance.getSwitch().read((NBTTagCompound) nbt);
+	public NBTBase writeNBT(Capability<ISwitch> capability, ISwitch instance, EnumFacing side) {
+		return instance.getSwitch().write();
 	}
 
 }

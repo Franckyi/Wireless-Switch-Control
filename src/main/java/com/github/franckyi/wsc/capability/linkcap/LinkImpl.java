@@ -12,11 +12,6 @@ public class LinkImpl implements ILink {
 	}
 
 	@Override
-	public void setSwitch(MasterLogicalSwitch mls) {
-		this.mls = mls;
-	}
-
-	@Override
 	public MasterLogicalSwitch getSwitch() {
 		return mls;
 	}
@@ -24,6 +19,11 @@ public class LinkImpl implements ILink {
 	@Override
 	public boolean isPresent() {
 		return mls != null;
+	}
+
+	@Override
+	public void setSwitch(MasterLogicalSwitch mls) {
+		this.mls = mls;
 	}
 
 }

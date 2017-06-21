@@ -6,10 +6,10 @@ public interface ILink {
 
 	public void clear();
 
-	public void setSwitch(MasterLogicalSwitch mls);
-
 	public MasterLogicalSwitch getSwitch();
 
 	public boolean isPresent();
+
+	public void setSwitch(MasterLogicalSwitch mls);
 
 }

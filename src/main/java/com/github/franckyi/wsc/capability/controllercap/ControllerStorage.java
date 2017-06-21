@@ -16,14 +16,6 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 public class ControllerStorage implements IStorage<IController> {
 
 	@Override
-	public NBTBase writeNBT(Capability<IController> capability, IController instance, EnumFacing side) {
-		NBTTagList nbt = new NBTTagList();
-		for (MasterLogicalSwitch mls : instance.getSwitches())
-			nbt.appendTag(mls.write());
-		return nbt;
-	}
-
-	@Override
 	public void readNBT(Capability<IController> capability, IController instance, EnumFacing side, NBTBase nbt) {
 		NBTTagList list = (NBTTagList) nbt;
 		List<MasterLogicalSwitch> switches = new ArrayList<MasterLogicalSwitch>();
@@ -36,6 +28,14 @@ public class ControllerStorage implements IStorage<IController> {
 
 		instance.setSwitches(switches);
 
+	}
+
+	@Override
+	public NBTBase writeNBT(Capability<IController> capability, IController instance, EnumFacing side) {
+		NBTTagList nbt = new NBTTagList();
+		for (MasterLogicalSwitch mls : instance.getSwitches())
+			nbt.appendTag(mls.write());
+		return nbt;
 	}
 
 }

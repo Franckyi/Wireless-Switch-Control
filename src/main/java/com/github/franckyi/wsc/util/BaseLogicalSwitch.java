@@ -9,6 +9,9 @@ public abstract class BaseLogicalSwitch {
 	private boolean enabled;
 	private int power;
 
+	public BaseLogicalSwitch() {
+	}
+
 	public BaseLogicalSwitch(boolean linked, String name, boolean enabled, int power) {
 		this.linked = linked;
 		this.name = name;
@@ -16,39 +19,20 @@ public abstract class BaseLogicalSwitch {
 		this.power = power;
 	}
 
-	public BaseLogicalSwitch() {
-	}
-
-	public boolean isLinked() {
-		return linked;
-	}
-
-	public void setLinked(boolean linked) {
-		this.linked = linked;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
 	}
 
 	public int getPower() {
 		return power;
 	}
 
-	public void setPower(int power) {
-		this.power = power;
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public boolean isLinked() {
+		return linked;
 	}
 
 	public void read(NBTTagCompound c) {
@@ -56,6 +40,22 @@ public abstract class BaseLogicalSwitch {
 		setName(c.getString("name"));
 		setEnabled(c.getBoolean("enabled"));
 		setPower(c.getInteger("power"));
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void setLinked(boolean linked) {
+		this.linked = linked;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPower(int power) {
+		this.power = power;
 	}
 
 	public NBTTagCompound write() {
