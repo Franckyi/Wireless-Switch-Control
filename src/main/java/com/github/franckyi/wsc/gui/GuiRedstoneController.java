@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.network.ControllerDataMessage;
+import com.github.franckyi.wsc.network.UnlinkingMessage;
 import com.github.franckyi.wsc.util.BaseLogicalSwitch;
 import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 
@@ -47,25 +48,41 @@ public class GuiRedstoneController extends GuiScreen {
 			buttonList.add(gs.unlinkButton);
 		}
 		this.list = new GuiSlotSwitchList(100, 20);
-		buttonList.add(cancel = new GuiButton(3, width/2 - 100, height - 40, 90, 20, "§cCancel"));
-		buttonList.add(done = new GuiButton(4, width/2 + 10, height - 40, 90, 20, "§aDone"));
+		buttonList.add(cancel = new GuiButton(3, width / 2 - 100, height - 40, 90, 20, "§cCancel"));
+		buttonList.add(done = new GuiButton(4, width / 2 + 10, height - 40, 90, 20, "§aDone"));
 	}
-	
+
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if(button == done) {
+		if (button == done) {
 			if (selected != -1)
 				saveCache();
 			PacketHandler.INSTANCE.sendToServer(new ControllerDataMessage(Side.CLIENT, switches, pos));
 		}
-		if(button == done || button == cancel) {
+		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);
 			if (this.mc.currentScreen == null)
-	            this.mc.setIngameFocus();
+				this.mc.setIngameFocus();
 		}
-		for(GraphicalSwitch gs : gswitches) {
-			if(button == gs.enabledButton)
+		boolean unlinking = false;
+		for (GraphicalSwitch gs : gswitches) {
+			if (button == gs.enabledButton) {
 				switches.get(gswitches.indexOf(gs)).setEnabled(gs.enabledButton.value());
+				break;
+			}
+			if (button == gs.unlinkButton) {
+				PacketHandler.INSTANCE.sendToServer(new UnlinkingMessage(selectedSwitch, pos));
+				unlinking = true;
+				break;
+			}
+		}
+		if (unlinking) {
+			selectedGSwitch.setVisible(false);
+			switches.remove(selected);
+			gswitches.remove(selected);
+			selectedGSwitch = null;
+			selectedSwitch = null;
+			selected = -1;
 		}
 	}
 
@@ -74,7 +91,8 @@ public class GuiRedstoneController extends GuiScreen {
 		this.drawDefaultBackground();
 		this.drawCenteredString(fontRenderer, "Redstone Controller", width / 2, 20, 0xffffff);
 		if (selected == -1)
-			this.drawCenteredString(fontRenderer, "Select a linked switch in the menu.", width / 2 + 60, height / 2 - 10, 0x5555FF);
+			this.drawCenteredString(fontRenderer, "Select a linked switch in the menu.", width / 2 + 60,
+					height / 2 - 10, 0x5555FF);
 		else {
 			this.drawString(fontRenderer, "Name :", width / 2 - 40, height / 2 - 43, 0xffffff);
 			this.drawString(fontRenderer, "Enabled :", width / 2 - 40, height / 2 - 18, 0xffffff);
@@ -122,7 +140,8 @@ public class GuiRedstoneController extends GuiScreen {
 		this.selected = index;
 		this.selectedSwitch = (index >= 0 && index <= switches.size()) ? switches.get(selected) : null;
 		this.selectedGSwitch = (index >= 0 && index <= gswitches.size()) ? gswitches.get(selected) : null;
-		this.selectedGSwitch.setVisible(true);
+		if (selected != -1)
+			this.selectedGSwitch.setVisible(true);
 	}
 
 	private boolean switchIndexSelected(int index) {
@@ -132,7 +151,6 @@ public class GuiRedstoneController extends GuiScreen {
 	private void saveCache() {
 		selectedGSwitch.setVisible(false);
 		selectedSwitch.setName(selectedGSwitch.nameField.getText());
-//		selectedSwitch.setEnabled(selectedGSwitch.enabledButton.value());
 		selectedSwitch.setPower(selectedGSwitch.powerField.getInt());
 	}
 

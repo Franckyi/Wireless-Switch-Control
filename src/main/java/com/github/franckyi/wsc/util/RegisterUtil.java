@@ -17,6 +17,8 @@ import com.github.franckyi.wsc.network.ControllerDataMessage;
 import com.github.franckyi.wsc.network.ControllerDataMessage.ControllerDataMessageHandler;
 import com.github.franckyi.wsc.network.SwitchDataMessage;
 import com.github.franckyi.wsc.network.SwitchDataMessage.SwitchDataMessageHandler;
+import com.github.franckyi.wsc.network.UnlinkingMessage;
+import com.github.franckyi.wsc.network.UnlinkingMessage.UnlinkingMessageHandler;
 import com.github.franckyi.wsc.tileentity.TileEntityController;
 import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
 
@@ -89,6 +91,7 @@ public class RegisterUtil {
 		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 1, Side.SERVER);
 		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 2, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 3, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, UnlinkingMessage.class, 4, Side.SERVER);
 	}
 
 }
