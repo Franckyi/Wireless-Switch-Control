@@ -4,7 +4,7 @@ import com.github.franckyi.wsc.util.MasterLogicalSwitch;
 
 public interface ILink {
 
-	public void clear();
+	public void reset();
 
 	public MasterLogicalSwitch getSwitch();
 

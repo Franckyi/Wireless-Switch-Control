@@ -27,7 +27,7 @@ public class GuiRedstoneController extends GuiScreen {
 		private GuiRedstoneController parent;
 		private GuiTextField nameField;
 		private GuiOnOffButton enabledButton;
-		private GuiIntTextField powerField;
+		private GuiPower power;
 		private GuiButton unlinkButton;
 
 		private GraphicalSwitch(BaseLogicalSwitch ls, GuiRedstoneController parent, int delta) {
@@ -35,9 +35,9 @@ public class GuiRedstoneController extends GuiScreen {
 			this.nameField = new GuiTextField(1 + 10 * delta, fontRenderer, width / 2 + 40, height / 2 - 50, 100, 20);
 			this.nameField.setText(ls.getName());
 			this.enabledButton = new GuiOnOffButton(2 + 10 * delta, width / 2 + 75, height / 2 - 25, ls.isEnabled());
-			this.powerField = new GuiIntTextField(3 + 10 * delta, fontRenderer, width / 2 + 80, height / 2, 20, 20, 15);
-			this.powerField.setText(ls.getPower() + "");
-			this.unlinkButton = new GuiButton(4 + 10 * delta, width / 2 + 65, height / 2 + 25, 50, 20, "§cUnlink");
+			this.power = new GuiPower(3 + 10 * delta, fontRenderer, width / 2 + 55, height / 2);
+			this.power.getPower().setText(ls.getPower() + "");
+			this.unlinkButton = new GuiButton(6 + 10 * delta, width / 2 + 65, height / 2 + 25, 50, 20, "§cUnlink");
 			setVisible(false);
 		}
 
@@ -45,7 +45,9 @@ public class GuiRedstoneController extends GuiScreen {
 			this.visible = visible;
 			this.nameField.setVisible(visible);
 			this.enabledButton.visible = visible;
-			this.powerField.setVisible(visible);
+			this.power.getPower().setVisible(visible);
+			this.power.getAdd().visible = visible;
+			this.power.getSubstract().visible = visible;
 			this.unlinkButton.visible = visible;
 		}
 
@@ -53,8 +55,8 @@ public class GuiRedstoneController extends GuiScreen {
 
 	private class GuiSlotSwitchList extends GuiScrollingList {
 
-		public GuiSlotSwitchList(int listWidth, int slotHeight) {
-			super(mc, listWidth, height, 60, height - 60, 20, slotHeight, width, height);
+		public GuiSlotSwitchList() {
+			super(mc, 100, height, 60, height - 60, 20, 30, width, height);
 		}
 
 		@Override
@@ -65,7 +67,9 @@ public class GuiRedstoneController extends GuiScreen {
 		protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
 			MasterLogicalSwitch mls = switches.get(slotIdx);
 			String name = StringUtils.stripControlCodes(mls.getName());
-			drawCenteredString(fontRenderer, name, this.left + this.listWidth / 2 - 4, slotTop + 4,
+			drawCenteredString(fontRenderer, name, this.left + this.listWidth / 2 - 4, slotTop + 3,
+					(mls.isEnabled()) ? 0x55FF55 : 0xFF5555);
+			drawString(fontRenderer, new String(new char[mls.getPower()]).replace("\0", "| "), this.left + 4, slotTop + 15,
 					(mls.isEnabled()) ? 0x55FF55 : 0xFF5555);
 		}
 
@@ -76,7 +80,7 @@ public class GuiRedstoneController extends GuiScreen {
 
 		@Override
 		protected int getContentHeight() {
-			return (this.getSize()) * 20 + 1;
+			return this.getSize() * this.slotHeight + 1;
 		}
 
 		@Override
@@ -124,13 +128,16 @@ public class GuiRedstoneController extends GuiScreen {
 		boolean unlinking = false;
 		for (GraphicalSwitch gs : gswitches) {
 			if (button == gs.enabledButton) {
-				switches.get(gswitches.indexOf(gs)).setEnabled(gs.enabledButton.value());
+				switches.get(selected).setEnabled(gs.enabledButton.value());
 				break;
 			}
 			if (button == gs.unlinkButton) {
 				PacketHandler.INSTANCE.sendToServer(new UnlinkingMessage(selectedSwitch.getPos(), pos));
 				unlinking = true;
 				break;
+			}
+			if (button == gs.power.getAdd() || button == gs.power.getSubstract()) {
+				switches.get(selected).setPower(gs.power.getPower().getInt());
 			}
 		}
 		if (unlinking) {
@@ -157,8 +164,13 @@ public class GuiRedstoneController extends GuiScreen {
 		}
 		if (selected != -1) {
 			selectedGSwitch.nameField.drawTextBox();
-			selectedGSwitch.powerField.drawTextBox();
+			selectedGSwitch.power.getPower().drawTextBox();
+			selectedGSwitch.enabledButton.x = width / 2 + 75;
+			selectedGSwitch.enabledButton.y = height / 2 - 25;
+			selectedGSwitch.unlinkButton.x = width / 2 + 65;
+			selectedGSwitch.unlinkButton.y = height / 2 + 25;
 		}
+		
 		list.drawScreen(mouseX, mouseY, partialTicks);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
@@ -171,8 +183,10 @@ public class GuiRedstoneController extends GuiScreen {
 			gswitches.add(gs);
 			buttonList.add(gs.enabledButton);
 			buttonList.add(gs.unlinkButton);
+			buttonList.add(gs.power.getAdd());
+			buttonList.add(gs.power.getSubstract());
 		}
-		this.list = new GuiSlotSwitchList(100, 20);
+		this.list = new GuiSlotSwitchList();
 		buttonList.add(cancel = new GuiButton(3, width / 2 - 100, height - 40, 90, 20, "§cCancel"));
 		buttonList.add(done = new GuiButton(4, width / 2 + 10, height - 40, 90, 20, "§aDone"));
 	}
@@ -181,7 +195,9 @@ public class GuiRedstoneController extends GuiScreen {
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		if (selected != -1) {
 			selectedGSwitch.nameField.textboxKeyTyped(typedChar, keyCode);
-			selectedGSwitch.powerField.textboxKeyTyped(typedChar, keyCode);
+			selectedGSwitch.power.getPower().textboxKeyTyped(typedChar, keyCode);
+			selectedSwitch.setName(selectedGSwitch.nameField.getText());
+			selectedSwitch.setPower(selectedGSwitch.power.getPower().getInt());
 		}
 		super.keyTyped(typedChar, keyCode);
 	}
@@ -190,22 +206,21 @@ public class GuiRedstoneController extends GuiScreen {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		if (selected != -1) {
 			selectedGSwitch.nameField.mouseClicked(mouseX, mouseY, mouseButton);
-			selectedGSwitch.powerField.mouseClicked(mouseX, mouseY, mouseButton);
+			selectedGSwitch.power.getPower().mouseClicked(mouseX, mouseY, mouseButton);
 		}
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	private void saveCache() {
-		selectedGSwitch.setVisible(false);
 		selectedSwitch.setName(selectedGSwitch.nameField.getText());
-		selectedSwitch.setPower(selectedGSwitch.powerField.getInt());
+		selectedSwitch.setPower(selectedGSwitch.power.getPower().getInt());
 	}
 
 	private void selectSwitchIndex(int index) {
 		if (index == this.selected)
 			return;
-		if (selected != -1)
-			saveCache();
+		if(selected != -1)
+			this.selectedGSwitch.setVisible(false);
 		this.selected = index;
 		this.selectedSwitch = (index >= 0 && index <= switches.size()) ? switches.get(selected) : null;
 		this.selectedGSwitch = (index >= 0 && index <= gswitches.size()) ? gswitches.get(selected) : null;
@@ -221,7 +236,7 @@ public class GuiRedstoneController extends GuiScreen {
 	public void updateScreen() {
 		if (selected != -1) {
 			selectedGSwitch.nameField.updateCursorCounter();
-			selectedGSwitch.powerField.updateCursorCounter();
+			selectedGSwitch.power.getPower().updateCursorCounter();
 		}
 	}
 

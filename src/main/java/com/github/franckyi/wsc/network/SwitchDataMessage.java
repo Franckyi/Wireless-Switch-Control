@@ -59,7 +59,7 @@ public class SwitchDataMessage implements IMessage {
 									}
 								}
 							}
-							Capabilities.getLink(p).clear();
+							Capabilities.getLink(p).reset();
 						}
 
 					}

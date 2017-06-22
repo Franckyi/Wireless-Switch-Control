@@ -18,7 +18,9 @@ public class GuiIntTextField extends GuiTextField {
 	}
 
 	public int getInt() {
-		return Integer.parseInt(getText());
+		if (getText().length() != 0)
+			return Integer.parseInt(getText());
+		return 0;
 	}
 
 	@Override
@@ -26,6 +28,7 @@ public class GuiIntTextField extends GuiTextField {
 		if (keyCode == 14 || keyCode == 203 || keyCode == 205 || keyCode == 211)
 			return super.textboxKeyTyped(typedChar, keyCode);
 		if (Character.isDigit(typedChar)) {
+			this.setCursorPositionEnd();
 			if (max == 0)
 				return super.textboxKeyTyped(typedChar, keyCode);
 			int cur = Integer.parseInt(getText().concat(String.valueOf(typedChar)));

@@ -18,7 +18,7 @@ public class LinkStorage implements IStorage<ILink> {
 			mls.read(c);
 			instance.setSwitch(mls);
 		} else
-			instance.clear();
+			instance.reset();
 	}
 
 	@Override

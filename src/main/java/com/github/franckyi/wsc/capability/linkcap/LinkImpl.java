@@ -7,7 +7,7 @@ public class LinkImpl implements ILink {
 	private MasterLogicalSwitch mls;
 
 	@Override
-	public void clear() {
+	public void reset() {
 		mls = null;
 	}
 

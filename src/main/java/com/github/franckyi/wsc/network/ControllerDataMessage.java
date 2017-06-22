@@ -68,7 +68,7 @@ public class ControllerDataMessage implements IMessage {
 								}
 							}
 						}
-						Capabilities.getLink(p).clear();
+						Capabilities.getLink(p).reset();
 					}
 				});
 			}

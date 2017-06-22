@@ -13,7 +13,7 @@ public class EventHandler {
 	public void onPlayerLogsIn(PlayerLoggedInEvent event) {
 		EntityPlayer player = event.player;
 		ILink link = player.getCapability(LinkProvider.LINK_CAP, null);
-		link.clear();
+		link.reset();
 	}
 
 }

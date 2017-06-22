@@ -19,7 +19,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 
 	private GuiTextField name;
 	private GuiOnOffButton enabled;
-	private GuiIntTextField power;
+	private GuiPower power;
 	private GuiButton done, cancel;
 
 	public GuiRedstoneSwitch(SlaveLogicalSwitch sls, BlockPos pos) {
@@ -31,7 +31,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button == done) {
 			sls.setName(name.getText());
-			sls.setPower(power.getInt());
+			sls.setPower(power.getPower().getInt());
 			sls.setEnabled(enabled.value());
 			PacketHandler.INSTANCE.sendToServer(new SwitchDataMessage(Side.CLIENT, sls, pos));
 		}
@@ -55,7 +55,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 		this.drawString(fontRenderer, "Enabled :", width / 2 - 80, height / 2 - 3, 0xffffff);
 		this.drawString(fontRenderer, "Power :", width / 2 - 80, height / 2 + 23, 0xffffff);
 		name.drawTextBox();
-		power.drawTextBox();
+		power.getPower().drawTextBox();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
@@ -63,31 +63,33 @@ public class GuiRedstoneSwitch extends GuiScreen {
 	public void initGui() {
 		name = new GuiTextField(0, fontRenderer, width / 2 - 20, height / 2 - 35, 100, 20);
 		name.setText(sls.getName());
-		buttonList.add(enabled = new GuiOnOffButton(2, width / 2 + 15, height / 2 - 10, sls.isEnabled()));
-		power = new GuiIntTextField(1, fontRenderer, width / 2 + 20, height / 2 + 15, 20, 20, 15);
-		power.setText(sls.getPower() + "");
-		buttonList.add(cancel = new GuiButton(3, width / 2 - 100, height - 40, 90, 20, "§cCancel"));
-		buttonList.add(done = new GuiButton(4, width / 2 + 10, height - 40, 90, 20, "§aDone"));
+		buttonList.add(enabled = new GuiOnOffButton(1, width / 2 + 15, height / 2 - 10, sls.isEnabled()));
+		power = new GuiPower(2, fontRenderer, width / 2 - 5, height / 2 + 15);
+		power.getPower().setText(sls.getPower() + "");
+		buttonList.add(power.getAdd());
+		buttonList.add(power.getSubstract());
+		buttonList.add(cancel = new GuiButton(5, width / 2 - 100, height - 40, 90, 20, "§cCancel"));
+		buttonList.add(done = new GuiButton(6, width / 2 + 10, height - 40, 90, 20, "§aDone"));
 	}
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		name.textboxKeyTyped(typedChar, keyCode);
-		power.textboxKeyTyped(typedChar, keyCode);
+		power.getPower().textboxKeyTyped(typedChar, keyCode);
 		super.keyTyped(typedChar, keyCode);
 	}
 
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		name.mouseClicked(mouseX, mouseY, mouseButton);
-		power.mouseClicked(mouseX, mouseY, mouseButton);
+		power.getPower().mouseClicked(mouseX, mouseY, mouseButton);
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	public void updateScreen() {
 		name.updateCursorCounter();
-		power.updateCursorCounter();
+		power.getPower().updateCursorCounter();
 	}
 
 }
