@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RedstoneControllerDataProvider implements IWailaDataProvider {
-	
+
 	public static final RedstoneControllerDataProvider INSTANCE = new RedstoneControllerDataProvider();
 
 	@Override
@@ -38,10 +38,10 @@ public class RedstoneControllerDataProvider implements IWailaDataProvider {
 		if (tile instanceof TileEntityRedstoneController) {
 			List<MasterRedstoneSwitch> switches = tile.getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null)
 					.getSwitches();
-			currenttip.add("Linked switches :");
+			currenttip.add(switches.size() != 0 ? "Linked switches :" : "No switch linked");
 			for (MasterRedstoneSwitch mls : switches)
-				currenttip.add(" - " + (mls.isEnabled() ? "§a" : "§c") + mls.getName() + " [" + String.valueOf(mls.getPower())
-						+ "]§r");
+				currenttip.add(" - " + (mls.isEnabled() ? "§a" : "§c") + mls.getName() + " ["
+						+ String.valueOf(mls.getPower()) + "]§r");
 		}
 		return currenttip;
 	}

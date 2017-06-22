@@ -23,15 +23,12 @@ public class GuiRedstoneController extends GuiScreen {
 
 	private class GraphicalSwitch {
 
-		private boolean visible;
-		private GuiRedstoneController parent;
 		private GuiTextField nameField;
 		private GuiOnOffButton enabledButton;
 		private GuiPower power;
 		private GuiButton unlinkButton;
 
-		private GraphicalSwitch(BaseRedstoneSwitch ls, GuiRedstoneController parent, int delta) {
-			this.parent = parent;
+		private GraphicalSwitch(BaseRedstoneSwitch ls, int delta) {
 			this.nameField = new GuiTextField(1 + 10 * delta, fontRenderer, width / 2 + 40, height / 2 - 50, 100, 20);
 			this.nameField.setText(ls.getName());
 			this.enabledButton = new GuiOnOffButton(2 + 10 * delta, width / 2 + 75, height / 2 - 25, ls.isEnabled());
@@ -42,7 +39,6 @@ public class GuiRedstoneController extends GuiScreen {
 		}
 
 		private void setVisible(boolean visible) {
-			this.visible = visible;
 			this.nameField.setVisible(visible);
 			this.enabledButton.visible = visible;
 			this.power.getPower().setVisible(visible);
@@ -179,7 +175,7 @@ public class GuiRedstoneController extends GuiScreen {
 	public void initGui() {
 		int i = 0;
 		for (BaseRedstoneSwitch ls : switches) {
-			GraphicalSwitch gs = new GraphicalSwitch(ls, this, i++);
+			GraphicalSwitch gs = new GraphicalSwitch(ls, i++);
 			gswitches.add(gs);
 			buttonList.add(gs.enabledButton);
 			buttonList.add(gs.unlinkButton);

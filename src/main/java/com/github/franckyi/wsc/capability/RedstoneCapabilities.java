@@ -23,7 +23,7 @@ public class RedstoneCapabilities {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityRedstoneController)
 			return ((TileEntityRedstoneController) te).getSwitches();
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	public static IRedstoneLink getLink(EntityPlayer player) {
