@@ -16,14 +16,14 @@ Welcome to my new mod, Wireless Switch Control. This mod is still in development
 
 ## New Blocks
 
-* The Redstone Switch emits a configurable redstone signal. You can choose if it's enabled or not and wich power it emits in it's GUI. You can view it like a configurable Redstone Block. \
+* The Redstone Switch emits a configurable redstone signal. You can choose if it's enabled or not and how much power it emits in it's GUI. You can view it like a configurable Redstone Block. \
  [View craft](https://cdn.discordapp.com/attachments/327094438285541376/327382320526917633/unknown.png) | [View GUI](https://cdn.discordapp.com/attachments/327094438285541376/327462323855949834/unknown.png) 
 * The Redstone Controller lists all Redstone Switched linked to it. From this block GUI, you can control these switches. You can also unlink switches to this block. For the first release, one controller can only control up to 4 switches. \
 [View craft](https://cdn.discordapp.com/attachments/327094438285541376/327382389074558976/unknown.png) | [View GUI](https://cdn.discordapp.com/attachments/327094438285541376/327462456127651840/unknown.png)
 
 ## Linking Process
 
-To link your controller to you switch, just select an empty slot in you hand, then Sneak + Right Click on the switch, and finally Sneak + Right Click on the controller. Notice that it only works in this order.
+To link your controller to your switch, just select an empty slot in you hand, then Sneak + Right Click on the switch, and finally Sneak + Right Click on the controller. Notice that it only works in this order.
 
 ## Downloads
 
@@ -37,8 +37,8 @@ The mod is still in development. Backup your world before installing the mod (it
 
 ## Issues and Suggestions
 
-* If you find any bug, [please open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
-* If you have any suggestion, [please also open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
+* If you find a bug, [please open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
+* If you have a suggestion, [please also open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
 
 ## License
 
