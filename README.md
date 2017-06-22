@@ -23,7 +23,7 @@ Welcome to my new mod, Wireless Switch Control. This mod is still in development
 
 ## Linking Process
 
-To link your controller to your switch, just select an empty slot in you hand, then Sneak + Right Click on the switch, and finally Sneak + Right Click on the controller. Notice that it only works in this order.
+To link your controller to your switch, just select an empty slot in your hand, then Sneak + Right Click on the switch, and finally Sneak + Right Click on the controller. Notice that it only works in this order.
 
 ## Downloads
 
