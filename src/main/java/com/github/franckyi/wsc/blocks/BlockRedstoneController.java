@@ -101,7 +101,8 @@ public class BlockRedstoneController extends Block {
 							osls.get().getControllerPos().add(pos);
 							osls.get().setLinked(true);
 							RedstoneCapabilities.updateTileEntity(worldIn, link.getSwitch().getSwitchPos());
-							PacketHandler.INSTANCE.sendToAll(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(), link.getSwitch().getSwitchPos(), false));
+							PacketHandler.INSTANCE.sendToAll(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(),
+									link.getSwitch().getSwitchPos(), false));
 							RedstoneCapabilities.getLink(playerIn).reset();
 							ChatUtil.sendSuccess(playerIn,
 									"The switch has been successfully linked to this controller !");
