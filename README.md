@@ -16,7 +16,7 @@ Welcome to my new mod, Wireless Switch Control. This mod is still in development
 
 ## New Blocks
 
-* The Redstone Switch emits a configurable redstone signal. You can choose if it's enabled or not and wich power it emits in it's GUI. You can view it like a configurable Redstone Block. \
+* The Redstone Switch emits a configurable redstone signal. You can choose if it's enabled or not and how much power it emits in it's GUI. You can view it like a configurable Redstone Block. \
  [View craft](https://cdn.discordapp.com/attachments/327094438285541376/327382320526917633/unknown.png) | [View GUI](https://cdn.discordapp.com/attachments/327094438285541376/327462323855949834/unknown.png) 
 * The Redstone Controller lists all Redstone Switched linked to it. From this block GUI, you can control these switches. You can also unlink switches to this block. For the first release, one controller can only control up to 4 switches. \
 [View craft](https://cdn.discordapp.com/attachments/327094438285541376/327382389074558976/unknown.png) | [View GUI](https://cdn.discordapp.com/attachments/327094438285541376/327462456127651840/unknown.png)
