@@ -29,6 +29,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -67,7 +68,6 @@ public class RegisterUtil {
 	public static void registerInit(FMLInitializationEvent e) {
 		registerEventHandlers();
 		registerMessages();
-		registerRecipes();
 	}
 
 	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
@@ -98,14 +98,6 @@ public class RegisterUtil {
 		registerItems(e);
 		registerTileEntities();
 		registerCapabilities();
-	}
-
-	private static void registerRecipes() {
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_CONTROLLER)), "ABA", "CDC", "AEA",
-				'A', Items.IRON_INGOT, 'B', Items.REPEATER, 'C', Blocks.REDSTONE_BLOCK, 'D', Blocks.IRON_BLOCK, 'E',
-				Items.REDSTONE);
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_SWITCH)), "ABA", "CDC", "ACA",
-				'A', Items.IRON_INGOT, 'B', Blocks.LEVER, 'C', Items.REDSTONE, 'D', Blocks.REDSTONE_BLOCK);
 	}
 
 	private static void registerTileEntities() {

@@ -1,0 +1,30 @@
+{
+    "result": {
+        "item": "wsc:redstone_switch"
+    },
+
+    "pattern": [
+        "aba",
+        "cdc",
+        "aca"
+    ],
+
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "a": {
+            "item": "minecraft:iron_ingot"
+        },
+
+        "b": {
+            "item": "minecraft:lever"
+        },
+
+        "c": {
+            "item": "minecraft:redstone"
+        },
+
+        "d": {
+            "item": "minecraft:redstone_block"
+        }
+    }
+}
