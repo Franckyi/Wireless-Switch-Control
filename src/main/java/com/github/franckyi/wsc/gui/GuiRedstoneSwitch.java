@@ -33,7 +33,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 			sls.setName(name.getText());
 			sls.setPower(power.getPower().getInt());
 			sls.setEnabled(enabled.value());
-			PacketHandler.INSTANCE.sendToServer(new RedstoneSwitchDataMessage(Side.CLIENT, sls, pos));
+			PacketHandler.INSTANCE.sendToServer(new RedstoneSwitchDataMessage(Side.CLIENT, sls, pos, false));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);
@@ -47,8 +47,8 @@ public class GuiRedstoneSwitch extends GuiScreen {
 		this.drawDefaultBackground();
 		this.drawCenteredString(fontRenderer, "Redstone Switch", width / 2, 20, 0xffffff);
 		if (sls.isLinked())
-			this.drawCenteredString(fontRenderer, "This switch is linked to " + sls.getControllers().size()
-					+ " controller" + ((sls.getControllers().size() > 1) ? "s." : "."), width / 2, 50, 0x55FF55);
+			this.drawCenteredString(fontRenderer, "This switch is linked to " + sls.getControllerPos().size()
+					+ " controller" + ((sls.getControllerPos().size() > 1) ? "s." : "."), width / 2, 50, 0x55FF55);
 		else
 			this.drawCenteredString(fontRenderer, "This switch isn't linked to a controller.", width / 2, 50, 0xFF5555);
 		this.drawString(fontRenderer, "Name :", width / 2 - 80, height / 2 - 28, 0xffffff);

@@ -22,23 +22,24 @@ import net.minecraftforge.fml.common.Optional;
 public class RedstoneSwitchDataProvider implements IWailaDataProvider {
 
 	public static final RedstoneSwitchDataProvider INSTANCE = new RedstoneSwitchDataProvider();
-	
+
 	@Override
 	public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world,
 			BlockPos pos) {
-		return te.getTileData();
+		return tag;
 	}
 
 	@Override
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
 			IWailaConfigHandler config) {
 		TileEntity tile = accessor.getTileEntity();
-		if(tile instanceof TileEntityRedstoneSwitch) {
+		if (tile instanceof TileEntityRedstoneSwitch) {
 			SlaveRedstoneSwitch sls = tile.getCapability(RedstoneSwitchProvider.SWITCH_CAP, null).getSwitch();
-			currenttip.add("Linked : " + String.valueOf(sls.isLinked()));
+			currenttip.add((sls.isLinked() ? "§a" : "§c") + "Linked : " + String.valueOf(sls.isLinked())
+					+ (sls.isLinked() ? " (" + sls.getControllerPos().size() + ")§r" : "§r"));
 			currenttip.add("Name : " + sls.getName());
-			currenttip.add("Enabled : " + String.valueOf(sls.isEnabled()));
-			currenttip.add("Power : " + String.valueOf(sls.getPower()));
+			currenttip.add((sls.isEnabled() ? "§a" : "§c") + "Enabled : " + String.valueOf(sls.isEnabled()) + "§r");
+			currenttip.add("Power : [" + String.valueOf(sls.getPower()) + "]");
 		}
 		return currenttip;
 	}

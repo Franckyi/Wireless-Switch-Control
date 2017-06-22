@@ -16,7 +16,8 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 public class RedstoneControllerStorage implements IStorage<IRedstoneController> {
 
 	@Override
-	public void readNBT(Capability<IRedstoneController> capability, IRedstoneController instance, EnumFacing side, NBTBase nbt) {
+	public void readNBT(Capability<IRedstoneController> capability, IRedstoneController instance, EnumFacing side,
+			NBTBase nbt) {
 		NBTTagList list = (NBTTagList) nbt;
 		List<MasterRedstoneSwitch> switches = new ArrayList<MasterRedstoneSwitch>();
 		for (Iterator<NBTBase> i = list.iterator(); i.hasNext();) {

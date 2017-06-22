@@ -5,41 +5,41 @@ import net.minecraft.util.math.BlockPos;
 
 public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 
-	private BlockPos pos;
+	private BlockPos switchPos;
 
 	public MasterRedstoneSwitch() {
 	}
 
 	public MasterRedstoneSwitch(BaseRedstoneSwitch ls, BlockPos pos) {
 		super(ls.isLinked(), ls.getName(), ls.isEnabled(), ls.getPower());
-		this.pos = pos;
+		this.switchPos = pos;
 	}
 
 	public MasterRedstoneSwitch(boolean linked, String name, boolean enabled, int power, BlockPos pos) {
 		super(linked, name, enabled, power);
-		this.pos = pos;
+		this.switchPos = pos;
 	}
 
-	public BlockPos getPos() {
-		return pos;
+	public BlockPos getSwitchPos() {
+		return switchPos;
 	}
 
 	@Override
 	public void read(NBTTagCompound c) {
 		super.read(c);
-		setPos(new BlockPos(c.getInteger("x"), c.getInteger("y"), c.getInteger("z")));
+		setSwitchPos(new BlockPos(c.getInteger("x"), c.getInteger("y"), c.getInteger("z")));
 	}
 
-	public void setPos(BlockPos pos) {
-		this.pos = pos;
+	public void setSwitchPos(BlockPos pos) {
+		this.switchPos = pos;
 	}
 
 	@Override
 	public NBTTagCompound write() {
 		NBTTagCompound c = super.write();
-		c.setInteger("x", getPos().getX());
-		c.setInteger("y", getPos().getY());
-		c.setInteger("z", getPos().getZ());
+		c.setInteger("x", getSwitchPos().getX());
+		c.setInteger("y", getSwitchPos().getY());
+		c.setInteger("z", getSwitchPos().getZ());
 		return c;
 	}
 

@@ -9,7 +9,8 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 public class RedstoneSwitchStorage implements IStorage<IRedstoneSwitch> {
 
 	@Override
-	public void readNBT(Capability<IRedstoneSwitch> capability, IRedstoneSwitch instance, EnumFacing side, NBTBase nbt) {
+	public void readNBT(Capability<IRedstoneSwitch> capability, IRedstoneSwitch instance, EnumFacing side,
+			NBTBase nbt) {
 		instance.getSwitch().read((NBTTagCompound) nbt);
 	}
 

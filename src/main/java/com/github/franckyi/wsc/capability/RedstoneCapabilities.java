@@ -59,7 +59,7 @@ public class RedstoneCapabilities {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityRedstoneSwitch) {
 			SlaveRedstoneSwitch sls = ((TileEntityRedstoneSwitch) te).getSwitch();
-			((TileEntityRedstoneSwitch) te).setSwitch(new SlaveRedstoneSwitch(ls1, sls.getControllers()));
+			((TileEntityRedstoneSwitch) te).setSwitch(new SlaveRedstoneSwitch(ls1, sls.getControllerPos()));
 			updateTileEntity(world, pos);
 		}
 	}

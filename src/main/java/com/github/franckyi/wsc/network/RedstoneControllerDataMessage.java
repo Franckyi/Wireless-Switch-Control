@@ -6,6 +6,7 @@ import java.util.List;
 import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.handlers.GuiHandler;
+import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
@@ -25,7 +26,8 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class RedstoneControllerDataMessage implements IMessage {
 
-	public static class ControllerDataMessageHandler implements IMessageHandler<RedstoneControllerDataMessage, IMessage> {
+	public static class ControllerDataMessageHandler
+			implements IMessageHandler<RedstoneControllerDataMessage, IMessage> {
 
 		@Override
 		public IMessage onMessage(final RedstoneControllerDataMessage message, MessageContext ctx) {
@@ -35,10 +37,11 @@ public class RedstoneControllerDataMessage implements IMessage {
 				mainThread.addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
-						RedstoneCapabilities.setControllerSwitches(world, message.pos, message.switches);
-						Minecraft.getMinecraft().player.openGui(WSCMod.instance, GuiHandler.REDSTONE_CONTROLLER_GUI,
-								Minecraft.getMinecraft().world, message.pos.getX(), message.pos.getY(),
-								message.pos.getZ());
+						RedstoneCapabilities.setControllerSwitches(world, message.controllerPos, message.switches);
+						if (message.openGui)
+							Minecraft.getMinecraft().player.openGui(WSCMod.instance, GuiHandler.REDSTONE_CONTROLLER_GUI,
+									Minecraft.getMinecraft().world, message.controllerPos.getX(),
+									message.controllerPos.getY(), message.controllerPos.getZ());
 					}
 				});
 			} else {
@@ -47,21 +50,29 @@ public class RedstoneControllerDataMessage implements IMessage {
 				mainThread.addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
-						RedstoneCapabilities.setControllerSwitches(p.world, message.pos, message.switches);
-						for (MasterRedstoneSwitch updatedControllerSwitch : RedstoneCapabilities.getControllerSwitches(p.world,
-								message.pos)) {
-							RedstoneCapabilities.updateSwitch(p.world, updatedControllerSwitch.getPos(),
+						RedstoneCapabilities.setControllerSwitches(p.world, message.controllerPos, message.switches);
+						for (MasterRedstoneSwitch updatedControllerSwitch : RedstoneCapabilities
+								.getControllerSwitches(p.world, message.controllerPos)) {
+							RedstoneCapabilities.updateSwitch(p.world, updatedControllerSwitch.getSwitchPos(),
 									updatedControllerSwitch);
+							Optional<SlaveRedstoneSwitch> fromServer = RedstoneCapabilities.getSwitch(p.world,
+									updatedControllerSwitch.getSwitchPos());
+							if (fromServer.isPresent())
+								PacketHandler.INSTANCE.sendToAll(new RedstoneSwitchDataMessage(Side.SERVER,
+										fromServer.get(), updatedControllerSwitch.getSwitchPos(), false));
 							Optional<SlaveRedstoneSwitch> updatedSwitchBlock = RedstoneCapabilities.getSwitch(p.world,
-									updatedControllerSwitch.getPos());
+									updatedControllerSwitch.getSwitchPos());
 							if (updatedSwitchBlock.isPresent()) {
-								for (BlockPos pos : updatedSwitchBlock.get().getControllers()) {
-									List<MasterRedstoneSwitch> ss = RedstoneCapabilities.getControllerSwitches(p.world, pos);
+								for (BlockPos pos : updatedSwitchBlock.get().getControllerPos()) {
+									List<MasterRedstoneSwitch> ss = RedstoneCapabilities.getControllerSwitches(p.world,
+											pos);
 									for (MasterRedstoneSwitch oldControllerSwitch : RedstoneCapabilities
 											.getControllerSwitches(p.world, pos)) {
-										if (oldControllerSwitch.getPos().equals(updatedControllerSwitch.getPos())) {
+										if (oldControllerSwitch.getSwitchPos()
+												.equals(updatedControllerSwitch.getSwitchPos())) {
 											ss.set(ss.indexOf(oldControllerSwitch), updatedControllerSwitch);
-											RedstoneCapabilities.updateTileEntity(p.world, updatedControllerSwitch.getPos());
+											RedstoneCapabilities.updateTileEntity(p.world,
+													updatedControllerSwitch.getSwitchPos());
 											break;
 										}
 									}
@@ -79,40 +90,44 @@ public class RedstoneControllerDataMessage implements IMessage {
 
 	private Side source;
 	private List<MasterRedstoneSwitch> switches;
-
-	private BlockPos pos;
+	private BlockPos controllerPos;
+	private boolean openGui;
 
 	public RedstoneControllerDataMessage() {
 	}
 
-	public RedstoneControllerDataMessage(Side source, List<MasterRedstoneSwitch> switches, BlockPos pos) {
+	public RedstoneControllerDataMessage(Side source, List<MasterRedstoneSwitch> switches, BlockPos controllerPos,
+			boolean openGui) {
 		this.source = source;
 		this.switches = switches;
-		this.pos = pos;
+		this.controllerPos = controllerPos;
+		this.openGui = openGui;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		switches = new ArrayList<MasterRedstoneSwitch>();
 		source = (buf.readByte() == 0) ? Side.CLIENT : Side.SERVER;
-		pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+		controllerPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
 		byte size = buf.readByte();
 		for (int i = 0; i < size; i++) {
 			MasterRedstoneSwitch mls = new MasterRedstoneSwitch();
 			mls.read(ByteBufUtils.readTag(buf));
 			switches.add(mls);
 		}
+		openGui = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeByte((source.equals(Side.CLIENT)) ? 0 : 1);
-		buf.writeInt(pos.getX());
-		buf.writeInt(pos.getY());
-		buf.writeInt(pos.getZ());
+		buf.writeInt(controllerPos.getX());
+		buf.writeInt(controllerPos.getY());
+		buf.writeInt(controllerPos.getZ());
 		buf.writeByte(switches.size());
 		for (MasterRedstoneSwitch mls : switches)
 			ByteBufUtils.writeTag(buf, mls.write());
+		buf.writeBoolean(openGui);
 	}
 
 }

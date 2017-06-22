@@ -53,8 +53,10 @@ public class RegisterUtil {
 
 	private static void registerCapabilities() {
 		CapabilityManager.INSTANCE.register(IRedstoneLink.class, new RedstoneLinkStorage(), RedstoneLinkImpl.class);
-		CapabilityManager.INSTANCE.register(IRedstoneController.class, new RedstoneControllerStorage(), RedstoneController.class);
-		CapabilityManager.INSTANCE.register(IRedstoneSwitch.class, new RedstoneSwitchStorage(), RedstoneSwitchImpl.class);
+		CapabilityManager.INSTANCE.register(IRedstoneController.class, new RedstoneControllerStorage(),
+				RedstoneController.class);
+		CapabilityManager.INSTANCE.register(IRedstoneSwitch.class, new RedstoneSwitchStorage(),
+				RedstoneSwitchImpl.class);
 	}
 
 	private static void registerEventHandlers() {
@@ -79,13 +81,16 @@ public class RegisterUtil {
 	}
 
 	private static void registerMessages() {
-		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 0, Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 1, Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class, 2,
+		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 0,
 				Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class, 3,
+		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 1,
 				Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, RedstoneUnlinkingMessage.class, 4, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class,
+				2, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class,
+				3, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, RedstoneUnlinkingMessage.class, 4,
+				Side.SERVER);
 	}
 
 	public static void registerPreInit(FMLPreInitializationEvent e) {
@@ -97,8 +102,8 @@ public class RegisterUtil {
 
 	private static void registerRecipes() {
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_CONTROLLER)), "ABA", "CDC", "AEA",
-				'A', Items.IRON_INGOT, 'B', Items.REPEATER, 'C', Blocks.REDSTONE_BLOCK, 'D',
-				Blocks.IRON_BLOCK, 'E', Items.REDSTONE);
+				'A', Items.IRON_INGOT, 'B', Items.REPEATER, 'C', Blocks.REDSTONE_BLOCK, 'D', Blocks.IRON_BLOCK, 'E',
+				Items.REDSTONE);
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_SWITCH)), "ABA", "CDC", "ACA",
 				'A', Items.IRON_INGOT, 'B', Blocks.LEVER, 'C', Items.REDSTONE, 'D', Blocks.REDSTONE_BLOCK);
 	}

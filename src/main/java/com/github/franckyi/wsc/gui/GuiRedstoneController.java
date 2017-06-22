@@ -69,8 +69,8 @@ public class GuiRedstoneController extends GuiScreen {
 			String name = StringUtils.stripControlCodes(mls.getName());
 			drawCenteredString(fontRenderer, name, this.left + this.listWidth / 2 - 4, slotTop + 3,
 					(mls.isEnabled()) ? 0x55FF55 : 0xFF5555);
-			drawString(fontRenderer, new String(new char[mls.getPower()]).replace("\0", "| "), this.left + 4, slotTop + 15,
-					(mls.isEnabled()) ? 0x55FF55 : 0xFF5555);
+			drawString(fontRenderer, new String(new char[mls.getPower()]).replace("\0", "| "), this.left + 4,
+					slotTop + 15, (mls.isEnabled()) ? 0x55FF55 : 0xFF5555);
 		}
 
 		@Override
@@ -118,7 +118,7 @@ public class GuiRedstoneController extends GuiScreen {
 		if (button == done) {
 			if (selected != -1)
 				saveCache();
-			PacketHandler.INSTANCE.sendToServer(new RedstoneControllerDataMessage(Side.CLIENT, switches, pos));
+			PacketHandler.INSTANCE.sendToServer(new RedstoneControllerDataMessage(Side.CLIENT, switches, pos, false));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);
@@ -132,7 +132,7 @@ public class GuiRedstoneController extends GuiScreen {
 				break;
 			}
 			if (button == gs.unlinkButton) {
-				PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(selectedSwitch.getPos(), pos));
+				PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(selectedSwitch.getSwitchPos(), pos));
 				unlinking = true;
 				break;
 			}
@@ -170,7 +170,7 @@ public class GuiRedstoneController extends GuiScreen {
 			selectedGSwitch.unlinkButton.x = width / 2 + 65;
 			selectedGSwitch.unlinkButton.y = height / 2 + 25;
 		}
-		
+
 		list.drawScreen(mouseX, mouseY, partialTicks);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
@@ -219,7 +219,7 @@ public class GuiRedstoneController extends GuiScreen {
 	private void selectSwitchIndex(int index) {
 		if (index == this.selected)
 			return;
-		if(selected != -1)
+		if (selected != -1)
 			this.selectedGSwitch.setVisible(false);
 		this.selected = index;
 		this.selectedSwitch = (index >= 0 && index <= switches.size()) ? switches.get(selected) : null;

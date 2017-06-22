@@ -31,7 +31,7 @@ public class RedstoneUnlinkingMessage implements IMessage {
 							message.controllerPos);
 					MasterRedstoneSwitch toRemove = null;
 					for (MasterRedstoneSwitch mls : switches)
-						if (mls.getPos().equals(message.switchPos)) {
+						if (mls.getSwitchPos().equals(message.switchPos)) {
 							toRemove = mls;
 							break;
 						}
@@ -40,8 +40,8 @@ public class RedstoneUnlinkingMessage implements IMessage {
 					RedstoneCapabilities.setControllerSwitches(world, message.controllerPos, switches);
 					Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(world, message.switchPos);
 					if (osls.isPresent()) {
-						osls.get().getControllers().remove(message.controllerPos);
-						if (osls.get().getControllers().isEmpty())
+						osls.get().getControllerPos().remove(message.controllerPos);
+						if (osls.get().getControllerPos().isEmpty())
 							osls.get().setLinked(false);
 						RedstoneCapabilities.setSwitch(world, message.switchPos, osls.get());
 					}
@@ -53,7 +53,6 @@ public class RedstoneUnlinkingMessage implements IMessage {
 	}
 
 	private BlockPos switchPos;
-
 	private BlockPos controllerPos;
 
 	public RedstoneUnlinkingMessage() {

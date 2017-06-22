@@ -5,6 +5,7 @@ import java.util.List;
 import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.handlers.GuiHandler;
+import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
@@ -34,10 +35,11 @@ public class RedstoneSwitchDataMessage implements IMessage {
 				mainThread.addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
-						RedstoneCapabilities.setSwitch(world, message.pos, message.sls);
-						Minecraft.getMinecraft().player.openGui(WSCMod.instance, GuiHandler.REDSTONE_SWITCH_GUI,
-								Minecraft.getMinecraft().world, message.pos.getX(), message.pos.getY(),
-								message.pos.getZ());
+						RedstoneCapabilities.setSwitch(world, message.switchPos, message.sls);
+						if (message.openGui)
+							Minecraft.getMinecraft().player.openGui(WSCMod.instance, GuiHandler.REDSTONE_SWITCH_GUI,
+									Minecraft.getMinecraft().world, message.switchPos.getX(), message.switchPos.getY(),
+									message.switchPos.getZ());
 					}
 				});
 			} else {
@@ -46,18 +48,22 @@ public class RedstoneSwitchDataMessage implements IMessage {
 				mainThread.addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
-						RedstoneCapabilities.setSwitch(p.world, message.pos, message.sls);
-						Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(p.world, message.pos);
+						RedstoneCapabilities.setSwitch(p.world, message.switchPos, message.sls);
+						Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(p.world, message.switchPos);
 						if (osls.isPresent()) {
-							for (BlockPos pos : RedstoneCapabilities.getSwitch(p.world, message.pos).get().getControllers()) {
-								List<MasterRedstoneSwitch> list = RedstoneCapabilities.getControllerSwitches(p.world, pos);
+							for (BlockPos pos : osls.get().getControllerPos()) {
+								List<MasterRedstoneSwitch> list = RedstoneCapabilities.getControllerSwitches(p.world,
+										pos);
 								for (MasterRedstoneSwitch mls : list) {
-									if (mls.getPos().equals(message.pos)) {
-										list.set(list.indexOf(mls), new MasterRedstoneSwitch(message.sls, message.pos));
+									if (mls.getSwitchPos().equals(message.switchPos)) {
+										list.set(list.indexOf(mls),
+												new MasterRedstoneSwitch(message.sls, message.switchPos));
 										RedstoneCapabilities.updateTileEntity(p.world, pos);
 										break;
 									}
 								}
+								PacketHandler.INSTANCE
+										.sendToAll(new RedstoneControllerDataMessage(Side.SERVER, list, pos, false));
 							}
 							RedstoneCapabilities.getLink(p).reset();
 						}
@@ -72,16 +78,17 @@ public class RedstoneSwitchDataMessage implements IMessage {
 
 	private Side source;
 	private SlaveRedstoneSwitch sls;
-
-	private BlockPos pos;
+	private BlockPos switchPos;
+	private boolean openGui;
 
 	public RedstoneSwitchDataMessage() {
 	}
 
-	public RedstoneSwitchDataMessage(Side dataSource, SlaveRedstoneSwitch sls, BlockPos pos) {
+	public RedstoneSwitchDataMessage(Side dataSource, SlaveRedstoneSwitch sls, BlockPos switchPos, boolean openGui) {
 		this.source = dataSource;
 		this.sls = sls;
-		this.pos = pos;
+		this.switchPos = switchPos;
+		this.openGui = openGui;
 	}
 
 	@Override
@@ -89,16 +96,18 @@ public class RedstoneSwitchDataMessage implements IMessage {
 		sls = new SlaveRedstoneSwitch();
 		source = (buf.readByte() == 0) ? Side.CLIENT : Side.SERVER;
 		sls.read(ByteBufUtils.readTag(buf));
-		pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+		switchPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+		openGui = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeByte((source.equals(Side.CLIENT)) ? 0 : 1);
 		ByteBufUtils.writeTag(buf, sls.write());
-		buf.writeInt(pos.getX());
-		buf.writeInt(pos.getY());
-		buf.writeInt(pos.getZ());
+		buf.writeInt(switchPos.getX());
+		buf.writeInt(switchPos.getY());
+		buf.writeInt(switchPos.getZ());
+		buf.writeBoolean(openGui);
 	}
 
 }

@@ -19,7 +19,7 @@ public class GuiPower {
 		public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 			if (super.mousePressed(mc, mouseX, mouseY)) {
 				int nextVal = power.getInt() + (add ? 1 : -1);
-				if(nextVal <= 15 && nextVal >= 0)
+				if (nextVal <= 15 && nextVal >= 0)
 					power.setText(nextVal + "");
 				return true;
 			}

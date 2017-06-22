@@ -44,7 +44,7 @@ public class BlockRedstoneSwitch extends Block {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(world, pos);
 		if (osls.isPresent())
-			for (BlockPos controller : RedstoneCapabilities.getSwitch(world, pos).get().getControllers())
+			for (BlockPos controller : RedstoneCapabilities.getSwitch(world, pos).get().getControllerPos())
 				PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(pos, controller));
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
@@ -89,7 +89,7 @@ public class BlockRedstoneSwitch extends Block {
 					link.setSwitch(new MasterRedstoneSwitch(osls.get(), pos));
 					ChatUtil.sendInfo(playerIn, "Switch selected.");
 				} else
-					PacketHandler.INSTANCE.sendTo(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(), pos),
+					PacketHandler.INSTANCE.sendTo(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(), pos, true),
 							(EntityPlayerMP) playerIn);
 			} else
 				ChatUtil.sendError(playerIn, "Unable to access the Capability.");
