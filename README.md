@@ -32,7 +32,9 @@ The mod is still in development. Backup your world before installing the mod (it
 * MC 1.11.2
   - [0.0.1-SNAPSHOT2](https://cdn.discordapp.com/attachments/327094438285541376/327460035582099456/wsc-0.0.1-SNAPSHOT2.jar) ([Source](https://cdn.discordapp.com/attachments/327094438285541376/327460127928221697/wsc-0.0.1-SNAPSHOT2-sources.jar))
   - [0.0.1-SNAPSHOT1](https://cdn.discordapp.com/attachments/327094438285541376/327389750182936577/wsc-0.0.1-SNAPSHOT1.jar) ([Source](https://cdn.discordapp.com/attachments/327094438285541376/327389805551812608/wsc-0.0.1-SNAPSHOT1-sources.jar))
-  
+* MC 1.12
+  - [0.0.1-SNAPSHOT2](https://cdn.discordapp.com/attachments/327094438285541376/327501076666253324/wsc-0.0.1-SNAPSHOT2.jar) ([Source](https://cdn.discordapp.com/attachments/327094438285541376/327501076666253324/wsc-0.0.1-SNAPSHOT2.jar))
+
 ## Issues and Suggestions
 
 * If you find any bug, [please open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
