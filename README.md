@@ -23,7 +23,7 @@ Welcome to my new mod, Wireless Switch Control. This mod is still in development
 
 ## Linking Process
 
-To link your controller to you switch, just select an empty slot in you hand, then Sneak + Right Click on the switch, and finally Sneak + Right Click on the controller. Notice that it only works in this order.
+To link your controller to your switch, just select an empty slot in you hand, then Sneak + Right Click on the switch, and finally Sneak + Right Click on the controller. Notice that it only works in this order.
 
 ## Downloads
 
@@ -37,8 +37,8 @@ The mod is still in development. Backup your world before installing the mod (it
   
 ## Issues and Suggestions
 
-* If you find any bug, [please open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
-* If you have any suggestion, [please also open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
+* If you find a bug, [please open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
+* If you have a suggestion, [please also open an issue](https://github.com/Franckyi/Wireless-Switch-Control/issues).
 
 ## License
 
