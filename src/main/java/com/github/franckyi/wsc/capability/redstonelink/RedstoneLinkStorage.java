@@ -1,6 +1,6 @@
-package com.github.franckyi.wsc.capability.linkcap;
+package com.github.franckyi.wsc.capability.redstonelink;
 
-import com.github.franckyi.wsc.util.MasterLogicalSwitch;
+import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,13 +8,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
-public class LinkStorage implements IStorage<ILink> {
+public class RedstoneLinkStorage implements IStorage<IRedstoneLink> {
 
 	@Override
-	public void readNBT(Capability<ILink> capability, ILink instance, EnumFacing side, NBTBase nbt) {
+	public void readNBT(Capability<IRedstoneLink> capability, IRedstoneLink instance, EnumFacing side, NBTBase nbt) {
 		NBTTagCompound c = (NBTTagCompound) nbt;
 		if (c.getBoolean("present")) {
-			MasterLogicalSwitch mls = new MasterLogicalSwitch();
+			MasterRedstoneSwitch mls = new MasterRedstoneSwitch();
 			mls.read(c);
 			instance.setSwitch(mls);
 		} else
@@ -22,7 +22,7 @@ public class LinkStorage implements IStorage<ILink> {
 	}
 
 	@Override
-	public NBTBase writeNBT(Capability<ILink> capability, ILink instance, EnumFacing side) {
+	public NBTBase writeNBT(Capability<IRedstoneLink> capability, IRedstoneLink instance, EnumFacing side) {
 		NBTTagCompound c;
 		if (instance.isPresent()) {
 			c = instance.getSwitch().write();

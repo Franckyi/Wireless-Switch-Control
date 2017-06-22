@@ -2,17 +2,17 @@ package com.github.franckyi.wsc.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class BaseLogicalSwitch {
+public abstract class BaseRedstoneSwitch {
 
 	private boolean linked;
 	private String name;
 	private boolean enabled;
 	private int power;
 
-	public BaseLogicalSwitch() {
+	public BaseRedstoneSwitch() {
 	}
 
-	public BaseLogicalSwitch(boolean linked, String name, boolean enabled, int power) {
+	public BaseRedstoneSwitch(boolean linked, String name, boolean enabled, int power) {
 		this.linked = linked;
 		this.name = name;
 		this.enabled = enabled;

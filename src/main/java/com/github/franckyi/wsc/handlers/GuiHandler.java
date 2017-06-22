@@ -1,9 +1,9 @@
 package com.github.franckyi.wsc.handlers;
 
-import com.github.franckyi.wsc.capability.Capabilities;
+import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.gui.GuiRedstoneController;
 import com.github.franckyi.wsc.gui.GuiRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,11 +20,11 @@ public class GuiHandler implements IGuiHandler {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		if (ID == REDSTONE_CONTROLLER_GUI)
-			return new GuiRedstoneController(Capabilities.getControllerSwitches(world, pos), pos);
+			return new GuiRedstoneController(RedstoneCapabilities.getControllerSwitches(world, pos), pos);
 		else if (ID == REDSTONE_SWITCH_GUI) {
-			Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(world, pos);
+			Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(world, pos);
 			if (osls.isPresent())
-				return new GuiRedstoneSwitch(Capabilities.getSwitch(world, pos).get(), pos);
+				return new GuiRedstoneSwitch(RedstoneCapabilities.getSwitch(world, pos).get(), pos);
 		}
 		return null;
 	}

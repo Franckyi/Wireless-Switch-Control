@@ -1,4 +1,4 @@
-package com.github.franckyi.wsc.capability.controllercap;
+package com.github.franckyi.wsc.capability.redstonecontroller;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -6,12 +6,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class ControllerProvider implements ICapabilitySerializable<NBTBase> {
+public class RedstoneControllerProvider implements ICapabilitySerializable<NBTBase> {
 
-	@CapabilityInject(IController.class)
-	public static final Capability<IController> CONTROLLER_CAP = null;
+	@CapabilityInject(IRedstoneController.class)
+	public static final Capability<IRedstoneController> CONTROLLER_CAP = null;
 
-	private IController instance = CONTROLLER_CAP.getDefaultInstance();
+	private IRedstoneController instance = CONTROLLER_CAP.getDefaultInstance();
 
 	@Override
 	public void deserializeNBT(NBTBase nbt) {

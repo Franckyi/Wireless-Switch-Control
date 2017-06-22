@@ -1,14 +1,14 @@
 package com.github.franckyi.wsc.blocks;
 
-import com.github.franckyi.wsc.capability.Capabilities;
-import com.github.franckyi.wsc.capability.linkcap.ILink;
+import com.github.franckyi.wsc.capability.RedstoneCapabilities;
+import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.handlers.PacketHandler;
-import com.github.franckyi.wsc.network.SwitchDataMessage;
-import com.github.franckyi.wsc.network.UnlinkingMessage;
-import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
+import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
+import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
+import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 import com.github.franckyi.wsc.util.ChatUtil;
-import com.github.franckyi.wsc.util.MasterLogicalSwitch;
-import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
@@ -42,10 +42,10 @@ public class BlockRedstoneSwitch extends Block {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(world, pos);
+		Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(world, pos);
 		if (osls.isPresent())
-			for (BlockPos controller : Capabilities.getSwitch(world, pos).get().getControllers())
-				PacketHandler.INSTANCE.sendToServer(new UnlinkingMessage(pos, controller));
+			for (BlockPos controller : RedstoneCapabilities.getSwitch(world, pos).get().getControllers())
+				PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(pos, controller));
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
 	}
@@ -62,12 +62,12 @@ public class BlockRedstoneSwitch extends Block {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntitySwitch();
+		return new TileEntityRedstoneSwitch();
 	}
 
 	@Override
 	public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		Optional<SlaveLogicalSwitch> bls = Capabilities.getSwitch(world, pos);
+		Optional<SlaveRedstoneSwitch> bls = RedstoneCapabilities.getSwitch(world, pos);
 		if (bls.isPresent() && bls.get().isEnabled())
 			return bls.get().getPower();
 		return 0;
@@ -82,14 +82,14 @@ public class BlockRedstoneSwitch extends Block {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
-			Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(worldIn, pos);
+			Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(worldIn, pos);
 			if (osls.isPresent()) {
 				if (playerIn.isSneaking()) {
-					ILink link = Capabilities.getLink(playerIn);
-					link.setSwitch(new MasterLogicalSwitch(osls.get(), pos));
+					IRedstoneLink link = RedstoneCapabilities.getLink(playerIn);
+					link.setSwitch(new MasterRedstoneSwitch(osls.get(), pos));
 					ChatUtil.sendInfo(playerIn, "Switch selected.");
 				} else
-					PacketHandler.INSTANCE.sendTo(new SwitchDataMessage(Side.SERVER, osls.get(), pos),
+					PacketHandler.INSTANCE.sendTo(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(), pos),
 							(EntityPlayerMP) playerIn);
 			} else
 				ChatUtil.sendError(playerIn, "Unable to access the Capability.");

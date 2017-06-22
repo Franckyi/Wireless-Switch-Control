@@ -3,15 +3,15 @@ package com.github.franckyi.wsc.blocks;
 import java.util.Arrays;
 import java.util.List;
 
-import com.github.franckyi.wsc.capability.Capabilities;
-import com.github.franckyi.wsc.capability.linkcap.ILink;
+import com.github.franckyi.wsc.capability.RedstoneCapabilities;
+import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.handlers.PacketHandler;
-import com.github.franckyi.wsc.network.ControllerDataMessage;
-import com.github.franckyi.wsc.network.UnlinkingMessage;
-import com.github.franckyi.wsc.tileentity.TileEntityController;
+import com.github.franckyi.wsc.network.RedstoneControllerDataMessage;
+import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
+import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.util.ChatUtil;
-import com.github.franckyi.wsc.util.MasterLogicalSwitch;
-import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class BlockRedstoneController extends Block {
 
-	public static ItemStack tileEntityToItemStack(ItemStack is, TileEntityController te) {
+	public static ItemStack tileEntityToItemStack(ItemStack is, TileEntityRedstoneController te) {
 		return is;
 	}
 
@@ -50,22 +50,22 @@ public class BlockRedstoneController extends Block {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		List<MasterLogicalSwitch> switches = Capabilities.getControllerSwitches(world, pos);
-		for (MasterLogicalSwitch mls : switches)
-			PacketHandler.INSTANCE.sendToServer(new UnlinkingMessage(mls.getPos(), pos));
+		List<MasterRedstoneSwitch> switches = RedstoneCapabilities.getControllerSwitches(world, pos);
+		for (MasterRedstoneSwitch mls : switches)
+			PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(mls.getPos(), pos));
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
 	}
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntityController();
+		return new TileEntityRedstoneController();
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		TileEntityController te = world.getTileEntity(pos) instanceof TileEntityController
-				? (TileEntityController) world.getTileEntity(pos)
+		TileEntityRedstoneController te = world.getTileEntity(pos) instanceof TileEntityRedstoneController
+				? (TileEntityRedstoneController) world.getTileEntity(pos)
 				: null;
 		if (te != null)
 			return Arrays.asList(tileEntityToItemStack(new ItemStack(state.getBlock()), te));
@@ -82,11 +82,11 @@ public class BlockRedstoneController extends Block {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
-			List<MasterLogicalSwitch> list = Capabilities.getControllerSwitches(worldIn, pos);
+			List<MasterRedstoneSwitch> list = RedstoneCapabilities.getControllerSwitches(worldIn, pos);
 			if (playerIn.isSneaking()) {
-				ILink link = Capabilities.getLink(playerIn);
+				IRedstoneLink link = RedstoneCapabilities.getLink(playerIn);
 				if (link.isPresent()) {
-					for (MasterLogicalSwitch mls : list)
+					for (MasterRedstoneSwitch mls : list)
 						if (mls.getPos().equals(link.getSwitch().getPos())) {
 							ChatUtil.sendError(playerIn, "The switch is already linked to this controller !");
 							return true;
@@ -94,12 +94,12 @@ public class BlockRedstoneController extends Block {
 					if (list.size() < 4) {
 						link.getSwitch().setLinked(true);
 						list.add(link.getSwitch());
-						Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(worldIn, link.getSwitch().getPos());
+						Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(worldIn, link.getSwitch().getPos());
 						if (osls.isPresent()) {
 							osls.get().getControllers().add(pos);
 							osls.get().setLinked(true);
-							Capabilities.updateTileEntity(worldIn, link.getSwitch().getPos());
-							Capabilities.getLink(playerIn).reset();
+							RedstoneCapabilities.updateTileEntity(worldIn, link.getSwitch().getPos());
+							RedstoneCapabilities.getLink(playerIn).reset();
 							ChatUtil.sendSuccess(playerIn,
 									"The switch has been successfully linked to this controller !");
 						} else
@@ -110,7 +110,7 @@ public class BlockRedstoneController extends Block {
 					ChatUtil.sendError(playerIn, "You must select a switch first.");
 
 			} else
-				PacketHandler.INSTANCE.sendTo(new ControllerDataMessage(Side.SERVER, list, pos),
+				PacketHandler.INSTANCE.sendTo(new RedstoneControllerDataMessage(Side.SERVER, list, pos),
 						(EntityPlayerMP) playerIn);
 		}
 		return true;

@@ -1,26 +1,26 @@
 package com.github.franckyi.wsc.util;
 
-import com.github.franckyi.wsc.capability.controllercap.ControllerImpl;
-import com.github.franckyi.wsc.capability.controllercap.ControllerStorage;
-import com.github.franckyi.wsc.capability.controllercap.IController;
-import com.github.franckyi.wsc.capability.linkcap.ILink;
-import com.github.franckyi.wsc.capability.linkcap.LinkImpl;
-import com.github.franckyi.wsc.capability.linkcap.LinkStorage;
-import com.github.franckyi.wsc.capability.switchcap.ISwitch;
-import com.github.franckyi.wsc.capability.switchcap.SwitchImpl;
-import com.github.franckyi.wsc.capability.switchcap.SwitchStorage;
+import com.github.franckyi.wsc.capability.redstonecontroller.IRedstoneController;
+import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneController;
+import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerStorage;
+import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
+import com.github.franckyi.wsc.capability.redstonelink.RedstoneLinkImpl;
+import com.github.franckyi.wsc.capability.redstonelink.RedstoneLinkStorage;
+import com.github.franckyi.wsc.capability.redstoneswitch.IRedstoneSwitch;
+import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchImpl;
+import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchStorage;
 import com.github.franckyi.wsc.handlers.CapabilityHandler;
 import com.github.franckyi.wsc.handlers.EventHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
-import com.github.franckyi.wsc.network.ControllerDataMessage;
-import com.github.franckyi.wsc.network.ControllerDataMessage.ControllerDataMessageHandler;
-import com.github.franckyi.wsc.network.SwitchDataMessage;
-import com.github.franckyi.wsc.network.SwitchDataMessage.SwitchDataMessageHandler;
-import com.github.franckyi.wsc.network.UnlinkingMessage;
-import com.github.franckyi.wsc.network.UnlinkingMessage.UnlinkingMessageHandler;
-import com.github.franckyi.wsc.tileentity.TileEntityController;
-import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
+import com.github.franckyi.wsc.network.RedstoneControllerDataMessage;
+import com.github.franckyi.wsc.network.RedstoneControllerDataMessage.ControllerDataMessageHandler;
+import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
+import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage.SwitchDataMessageHandler;
+import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
+import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage.UnlinkingMessageHandler;
+import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
+import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -52,9 +52,9 @@ public class RegisterUtil {
 	}
 
 	private static void registerCapabilities() {
-		CapabilityManager.INSTANCE.register(ILink.class, new LinkStorage(), LinkImpl.class);
-		CapabilityManager.INSTANCE.register(IController.class, new ControllerStorage(), ControllerImpl.class);
-		CapabilityManager.INSTANCE.register(ISwitch.class, new SwitchStorage(), SwitchImpl.class);
+		CapabilityManager.INSTANCE.register(IRedstoneLink.class, new RedstoneLinkStorage(), RedstoneLinkImpl.class);
+		CapabilityManager.INSTANCE.register(IRedstoneController.class, new RedstoneControllerStorage(), RedstoneController.class);
+		CapabilityManager.INSTANCE.register(IRedstoneSwitch.class, new RedstoneSwitchStorage(), RedstoneSwitchImpl.class);
 	}
 
 	private static void registerEventHandlers() {
@@ -68,14 +68,6 @@ public class RegisterUtil {
 		registerRecipes();
 	}
 
-	private static void registerRecipes() {
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_CONTROLLER)), "ABA", "CDC", "AEA",
-				'A', Items.IRON_INGOT, 'B', Items.REPEATER, 'C', Blocks.REDSTONE_BLOCK, 'D',
-				Blocks.IRON_BLOCK, 'E', Items.REDSTONE);
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_SWITCH)), "ABA", "CDC", "ACA",
-				'A', Items.IRON_INGOT, 'B', Blocks.LEVER, 'C', Items.REDSTONE, 'D', Blocks.REDSTONE_BLOCK);
-	}
-
 	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
 		for (Item item : items) {
 			if (e.getSide() == Side.CLIENT) {
@@ -87,13 +79,13 @@ public class RegisterUtil {
 	}
 
 	private static void registerMessages() {
-		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 0, Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, SwitchDataMessage.class, 1, Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 2,
+		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 0, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 1, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class, 2,
 				Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, ControllerDataMessage.class, 3,
+		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class, 3,
 				Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, UnlinkingMessage.class, 4, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, RedstoneUnlinkingMessage.class, 4, Side.SERVER);
 	}
 
 	public static void registerPreInit(FMLPreInitializationEvent e) {
@@ -103,9 +95,17 @@ public class RegisterUtil {
 		registerCapabilities();
 	}
 
+	private static void registerRecipes() {
+		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_CONTROLLER)), "ABA", "CDC", "AEA",
+				'A', Items.IRON_INGOT, 'B', Items.REPEATER, 'C', Blocks.REDSTONE_BLOCK, 'D',
+				Blocks.IRON_BLOCK, 'E', Items.REDSTONE);
+		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_SWITCH)), "ABA", "CDC", "ACA",
+				'A', Items.IRON_INGOT, 'B', Blocks.LEVER, 'C', Items.REDSTONE, 'D', Blocks.REDSTONE_BLOCK);
+	}
+
 	private static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityController.class, "controller_tile_entity");
-		GameRegistry.registerTileEntity(TileEntitySwitch.class, "switch_tile_entity");
+		GameRegistry.registerTileEntity(TileEntityRedstoneController.class, "controller_tile_entity");
+		GameRegistry.registerTileEntity(TileEntityRedstoneSwitch.class, "switch_tile_entity");
 	}
 
 }

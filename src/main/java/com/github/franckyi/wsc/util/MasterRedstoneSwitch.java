@@ -3,19 +3,19 @@ package com.github.franckyi.wsc.util;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class MasterLogicalSwitch extends BaseLogicalSwitch {
+public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 
 	private BlockPos pos;
 
-	public MasterLogicalSwitch() {
+	public MasterRedstoneSwitch() {
 	}
 
-	public MasterLogicalSwitch(BaseLogicalSwitch ls, BlockPos pos) {
+	public MasterRedstoneSwitch(BaseRedstoneSwitch ls, BlockPos pos) {
 		super(ls.isLinked(), ls.getName(), ls.isEnabled(), ls.getPower());
 		this.pos = pos;
 	}
 
-	public MasterLogicalSwitch(boolean linked, String name, boolean enabled, int power, BlockPos pos) {
+	public MasterRedstoneSwitch(boolean linked, String name, boolean enabled, int power, BlockPos pos) {
 		super(linked, name, enabled, power);
 		this.pos = pos;
 	}

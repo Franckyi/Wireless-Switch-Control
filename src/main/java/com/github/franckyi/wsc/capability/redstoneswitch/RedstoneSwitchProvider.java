@@ -1,4 +1,4 @@
-package com.github.franckyi.wsc.capability.switchcap;
+package com.github.franckyi.wsc.capability.redstoneswitch;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -6,12 +6,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class SwitchProvider implements ICapabilitySerializable<NBTBase> {
+public class RedstoneSwitchProvider implements ICapabilitySerializable<NBTBase> {
 
-	@CapabilityInject(ISwitch.class)
-	public static final Capability<ISwitch> SWITCH_CAP = null;
+	@CapabilityInject(IRedstoneSwitch.class)
+	public static final Capability<IRedstoneSwitch> SWITCH_CAP = null;
 
-	private ISwitch instance = SWITCH_CAP.getDefaultInstance();
+	private IRedstoneSwitch instance = SWITCH_CAP.getDefaultInstance();
 
 	@Override
 	public void deserializeNBT(NBTBase nbt) {

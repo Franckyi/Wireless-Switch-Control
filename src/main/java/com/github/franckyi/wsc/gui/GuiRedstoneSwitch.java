@@ -3,8 +3,8 @@ package com.github.franckyi.wsc.gui;
 import java.io.IOException;
 
 import com.github.franckyi.wsc.handlers.PacketHandler;
-import com.github.franckyi.wsc.network.SwitchDataMessage;
-import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
+import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class GuiRedstoneSwitch extends GuiScreen {
 
-	private SlaveLogicalSwitch sls;
+	private SlaveRedstoneSwitch sls;
 	private BlockPos pos;
 
 	private GuiTextField name;
@@ -22,7 +22,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 	private GuiPower power;
 	private GuiButton done, cancel;
 
-	public GuiRedstoneSwitch(SlaveLogicalSwitch sls, BlockPos pos) {
+	public GuiRedstoneSwitch(SlaveRedstoneSwitch sls, BlockPos pos) {
 		this.pos = pos;
 		this.sls = sls;
 	}
@@ -33,7 +33,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 			sls.setName(name.getText());
 			sls.setPower(power.getPower().getInt());
 			sls.setEnabled(enabled.value());
-			PacketHandler.INSTANCE.sendToServer(new SwitchDataMessage(Side.CLIENT, sls, pos));
+			PacketHandler.INSTANCE.sendToServer(new RedstoneSwitchDataMessage(Side.CLIENT, sls, pos));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);

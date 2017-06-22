@@ -1,4 +1,4 @@
-package com.github.franckyi.wsc.capability.linkcap;
+package com.github.franckyi.wsc.capability.redstonelink;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -6,12 +6,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class LinkProvider implements ICapabilitySerializable<NBTBase> {
+public class RedstoneLinkProvider implements ICapabilitySerializable<NBTBase> {
 
-	@CapabilityInject(ILink.class)
-	public static final Capability<ILink> LINK_CAP = null;
+	@CapabilityInject(IRedstoneLink.class)
+	public static final Capability<IRedstoneLink> LINK_CAP = null;
 
-	private ILink instance = LINK_CAP.getDefaultInstance();
+	private IRedstoneLink instance = LINK_CAP.getDefaultInstance();
 
 	@Override
 	public void deserializeNBT(NBTBase nbt) {

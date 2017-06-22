@@ -1,11 +1,11 @@
 package com.github.franckyi.wsc.handlers;
 
 import com.github.franckyi.wsc.ModReference;
-import com.github.franckyi.wsc.capability.controllercap.ControllerProvider;
-import com.github.franckyi.wsc.capability.linkcap.LinkProvider;
-import com.github.franckyi.wsc.capability.switchcap.SwitchProvider;
-import com.github.franckyi.wsc.tileentity.TileEntityController;
-import com.github.franckyi.wsc.tileentity.TileEntitySwitch;
+import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerProvider;
+import com.github.franckyi.wsc.capability.redstonelink.RedstoneLinkProvider;
+import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchProvider;
+import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
+import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,15 +23,15 @@ public class CapabilityHandler {
 	@SubscribeEvent
 	public void attachCapabilityEntity(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer)
-			event.addCapability(LINK_CAP, new LinkProvider());
+			event.addCapability(LINK_CAP, new RedstoneLinkProvider());
 	}
 
 	@SubscribeEvent
 	public void attachCapabilityTileEntity(AttachCapabilitiesEvent<TileEntity> event) {
-		if (event.getObject() instanceof TileEntitySwitch)
-			event.addCapability(SWITCH_CAP, new SwitchProvider());
-		else if (event.getObject() instanceof TileEntityController)
-			event.addCapability(CONTROLLER_CAP, new ControllerProvider());
+		if (event.getObject() instanceof TileEntityRedstoneSwitch)
+			event.addCapability(SWITCH_CAP, new RedstoneSwitchProvider());
+		else if (event.getObject() instanceof TileEntityRedstoneController)
+			event.addCapability(CONTROLLER_CAP, new RedstoneControllerProvider());
 
 	}
 

@@ -2,9 +2,9 @@ package com.github.franckyi.wsc.network;
 
 import java.util.List;
 
-import com.github.franckyi.wsc.capability.Capabilities;
-import com.github.franckyi.wsc.util.MasterLogicalSwitch;
-import com.github.franckyi.wsc.util.SlaveLogicalSwitch;
+import com.github.franckyi.wsc.capability.RedstoneCapabilities;
+import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import io.netty.buffer.ByteBuf;
@@ -16,34 +16,34 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class UnlinkingMessage implements IMessage {
+public class RedstoneUnlinkingMessage implements IMessage {
 
-	public static class UnlinkingMessageHandler implements IMessageHandler<UnlinkingMessage, IMessage> {
+	public static class UnlinkingMessageHandler implements IMessageHandler<RedstoneUnlinkingMessage, IMessage> {
 
 		@Override
-		public IMessage onMessage(final UnlinkingMessage message, MessageContext ctx) {
+		public IMessage onMessage(final RedstoneUnlinkingMessage message, MessageContext ctx) {
 			final World world = ctx.getServerHandler().player.world;
 			IThreadListener mainThread = (WorldServer) world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					List<MasterLogicalSwitch> switches = Capabilities.getControllerSwitches(world,
+					List<MasterRedstoneSwitch> switches = RedstoneCapabilities.getControllerSwitches(world,
 							message.controllerPos);
-					MasterLogicalSwitch toRemove = null;
-					for (MasterLogicalSwitch mls : switches)
+					MasterRedstoneSwitch toRemove = null;
+					for (MasterRedstoneSwitch mls : switches)
 						if (mls.getPos().equals(message.switchPos)) {
 							toRemove = mls;
 							break;
 						}
 					if (toRemove != null)
 						switches.remove(toRemove);
-					Capabilities.setControllerSwitches(world, message.controllerPos, switches);
-					Optional<SlaveLogicalSwitch> osls = Capabilities.getSwitch(world, message.switchPos);
+					RedstoneCapabilities.setControllerSwitches(world, message.controllerPos, switches);
+					Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(world, message.switchPos);
 					if (osls.isPresent()) {
 						osls.get().getControllers().remove(message.controllerPos);
 						if (osls.get().getControllers().isEmpty())
 							osls.get().setLinked(false);
-						Capabilities.setSwitch(world, message.switchPos, osls.get());
+						RedstoneCapabilities.setSwitch(world, message.switchPos, osls.get());
 					}
 				}
 			});
@@ -56,10 +56,10 @@ public class UnlinkingMessage implements IMessage {
 
 	private BlockPos controllerPos;
 
-	public UnlinkingMessage() {
+	public RedstoneUnlinkingMessage() {
 	}
 
-	public UnlinkingMessage(BlockPos switchPos, BlockPos controllerPos) {
+	public RedstoneUnlinkingMessage(BlockPos switchPos, BlockPos controllerPos) {
 		this.switchPos = switchPos;
 		this.controllerPos = controllerPos;
 	}

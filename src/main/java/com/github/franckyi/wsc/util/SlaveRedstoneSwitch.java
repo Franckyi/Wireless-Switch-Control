@@ -9,19 +9,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 
-public class SlaveLogicalSwitch extends BaseLogicalSwitch {
+public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 
 	private Set<BlockPos> controllers;
 
-	public SlaveLogicalSwitch() {
+	public SlaveRedstoneSwitch() {
 	}
 
-	public SlaveLogicalSwitch(BaseLogicalSwitch ls, Set<BlockPos> controllers) {
+	public SlaveRedstoneSwitch(BaseRedstoneSwitch ls, Set<BlockPos> controllers) {
 		super(ls.isLinked(), ls.getName(), ls.isEnabled(), ls.getPower());
 		this.controllers = controllers;
 	}
 
-	public SlaveLogicalSwitch(boolean linked, String name, boolean enabled, int power, Set<BlockPos> controllers) {
+	public SlaveRedstoneSwitch(boolean linked, String name, boolean enabled, int power, Set<BlockPos> controllers) {
 		super(linked, name, enabled, power);
 		this.controllers = controllers;
 	}
