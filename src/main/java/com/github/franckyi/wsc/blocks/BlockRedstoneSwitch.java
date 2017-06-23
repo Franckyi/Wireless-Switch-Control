@@ -3,12 +3,12 @@ package com.github.franckyi.wsc.blocks;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.handlers.PacketHandler;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 import com.github.franckyi.wsc.util.ChatUtil;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;

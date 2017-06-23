@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,15 +27,14 @@ public class RedstoneControllerStorage implements IStorage<IRedstoneController> 
 			mls.read(c);
 			switches.add(mls);
 		}
-
-		instance.setSwitches(switches);
+		instance.setController(new BaseRedstoneController(switches));
 
 	}
 
 	@Override
 	public NBTBase writeNBT(Capability<IRedstoneController> capability, IRedstoneController instance, EnumFacing side) {
 		NBTTagList nbt = new NBTTagList();
-		for (MasterRedstoneSwitch mls : instance.getSwitches())
+		for (MasterRedstoneSwitch mls : instance.getController().getSwitches())
 			nbt.appendTag(mls.write());
 		return nbt;
 	}

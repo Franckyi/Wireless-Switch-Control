@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import com.github.franckyi.wsc.capability.redstoneswitch.IRedstoneSwitch;
 import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchProvider;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 public class TileEntityRedstoneSwitch extends TileEntity {
 
 	public TileEntityRedstoneSwitch() {
-		setSwitch(new SlaveRedstoneSwitch(false, "default", false, 0, new HashSet<BlockPos>()));
+		setSwitch(new SlaveRedstoneSwitch("default", false, 0, new HashSet<BlockPos>()));
 		markDirty();
 	}
 

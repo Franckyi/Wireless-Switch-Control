@@ -6,13 +6,14 @@ import java.util.List;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.handlers.PacketHandler;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.network.RedstoneControllerDataMessage;
 import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.util.ChatUtil;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
@@ -51,9 +52,10 @@ public class BlockRedstoneController extends Block {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		List<MasterRedstoneSwitch> switches = RedstoneCapabilities.getControllerSwitches(world, pos);
-		for (MasterRedstoneSwitch mls : switches)
-			PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(mls.getSwitchPos(), pos));
+		Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world, pos);
+		if(controller.isPresent())
+			for (MasterRedstoneSwitch mls : controller.get().getSwitches())
+				PacketHandler.INSTANCE.sendToServer(new RedstoneUnlinkingMessage(mls.getSwitchPos(), pos));
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
 	}
@@ -83,25 +85,24 @@ public class BlockRedstoneController extends Block {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
-			List<MasterRedstoneSwitch> list = RedstoneCapabilities.getControllerSwitches(worldIn, pos);
+			Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(worldIn, pos);
 			if (playerIn.isSneaking()) {
 				IRedstoneLink link = RedstoneCapabilities.getLink(playerIn);
-				if (link.isPresent()) {
-					for (MasterRedstoneSwitch mls : list)
+				if (link.isPresent() && controller.isPresent()) {
+					for (MasterRedstoneSwitch mls : controller.get().getSwitches())
 						if (mls.getSwitchPos().equals(link.getSwitch().getSwitchPos())) {
 							ChatUtil.sendError(playerIn, "The switch is already linked to this controller !");
 							return true;
 						}
-					if (list.size() < 4) {
-						link.getSwitch().setLinked(true);
-						list.add(link.getSwitch());
+					if (controller.get().getSwitches().size() < 4) {
+						controller.get().getSwitches().add(link.getSwitch());
 						Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(worldIn,
 								link.getSwitch().getSwitchPos());
 						if (osls.isPresent()) {
 							osls.get().getControllerPos().add(pos);
-							osls.get().setLinked(true);
 							RedstoneCapabilities.updateTileEntity(worldIn, link.getSwitch().getSwitchPos());
-							PacketHandler.INSTANCE.sendToAll(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(), link.getSwitch().getSwitchPos(), false));
+							PacketHandler.INSTANCE.sendToAll(new RedstoneSwitchDataMessage(Side.SERVER, osls.get(),
+									link.getSwitch().getSwitchPos(), false));
 							RedstoneCapabilities.getLink(playerIn).reset();
 							ChatUtil.sendSuccess(playerIn,
 									"The switch has been successfully linked to this controller !");
@@ -113,7 +114,7 @@ public class BlockRedstoneController extends Block {
 					ChatUtil.sendError(playerIn, "You must select a switch first.");
 
 			} else
-				PacketHandler.INSTANCE.sendTo(new RedstoneControllerDataMessage(Side.SERVER, list, pos, true),
+				PacketHandler.INSTANCE.sendTo(new RedstoneControllerDataMessage(Side.SERVER, controller.get().getSwitches(), pos, true),
 						(EntityPlayerMP) playerIn);
 		}
 		return true;

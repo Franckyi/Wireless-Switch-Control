@@ -6,8 +6,8 @@ import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import io.netty.buffer.ByteBuf;

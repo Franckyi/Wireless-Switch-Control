@@ -1,10 +1,9 @@
-package com.github.franckyi.wsc.util;
+package com.github.franckyi.wsc.logic;
 
 import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class BaseRedstoneSwitch {
 
-	private boolean linked;
 	private String name;
 	private boolean enabled;
 	private int power;
@@ -12,8 +11,7 @@ public abstract class BaseRedstoneSwitch {
 	public BaseRedstoneSwitch() {
 	}
 
-	public BaseRedstoneSwitch(boolean linked, String name, boolean enabled, int power) {
-		this.linked = linked;
+	public BaseRedstoneSwitch(String name, boolean enabled, int power) {
 		this.name = name;
 		this.enabled = enabled;
 		this.power = power;
@@ -31,12 +29,7 @@ public abstract class BaseRedstoneSwitch {
 		return enabled;
 	}
 
-	public boolean isLinked() {
-		return linked;
-	}
-
 	public void read(NBTTagCompound c) {
-		setLinked(c.getBoolean("linked"));
 		setName(c.getString("name"));
 		setEnabled(c.getBoolean("enabled"));
 		setPower(c.getInteger("power"));
@@ -44,10 +37,6 @@ public abstract class BaseRedstoneSwitch {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public void setLinked(boolean linked) {
-		this.linked = linked;
 	}
 
 	public void setName(String name) {
@@ -60,7 +49,6 @@ public abstract class BaseRedstoneSwitch {
 
 	public NBTTagCompound write() {
 		NBTTagCompound c = new NBTTagCompound();
-		c.setBoolean("linked", isLinked());
 		c.setString("name", getName());
 		c.setBoolean("enabled", isEnabled());
 		c.setInteger("power", getPower());

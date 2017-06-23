@@ -5,11 +5,12 @@ import java.util.List;
 
 import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.capability.redstonelink.RedstoneLinkProvider;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.BaseRedstoneSwitch;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
-import com.github.franckyi.wsc.util.BaseRedstoneSwitch;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,11 +20,11 @@ import net.minecraft.world.IBlockAccess;
 
 public class RedstoneCapabilities {
 
-	public static List<MasterRedstoneSwitch> getControllerSwitches(IBlockAccess world, BlockPos pos) {
+	public static Optional<BaseRedstoneController> getController(IBlockAccess world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityRedstoneController)
-			return ((TileEntityRedstoneController) te).getSwitches();
-		return Collections.emptyList();
+			return Optional.of(((TileEntityRedstoneController) te).getController());
+		return Optional.absent();
 	}
 
 	public static IRedstoneLink getLink(EntityPlayer player) {
@@ -39,10 +40,10 @@ public class RedstoneCapabilities {
 		return Optional.absent();
 	}
 
-	public static void setControllerSwitches(IBlockAccess world, BlockPos pos, List<MasterRedstoneSwitch> switches) {
+	public static void setController(IBlockAccess world, BlockPos pos, BaseRedstoneController controller) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityRedstoneController) {
-			((TileEntityRedstoneController) te).setSwitches(switches);
+			((TileEntityRedstoneController) te).setController(controller);
 			updateTileEntity(world, pos);
 		}
 	}

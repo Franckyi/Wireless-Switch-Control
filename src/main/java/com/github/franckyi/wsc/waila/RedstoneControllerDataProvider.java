@@ -3,8 +3,8 @@ package com.github.franckyi.wsc.waila;
 import java.util.List;
 
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerProvider;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -37,7 +37,7 @@ public class RedstoneControllerDataProvider implements IWailaDataProvider {
 		TileEntity tile = accessor.getTileEntity();
 		if (tile instanceof TileEntityRedstoneController) {
 			List<MasterRedstoneSwitch> switches = tile.getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null)
-					.getSwitches();
+					.getController().getSwitches();
 			currenttip.add(switches.size() != 0 ? "Linked switches :" : "No switch linked");
 			for (MasterRedstoneSwitch mls : switches)
 				currenttip.add(" - " + (mls.isEnabled() ? "§a" : "§c") + mls.getName() + " ["

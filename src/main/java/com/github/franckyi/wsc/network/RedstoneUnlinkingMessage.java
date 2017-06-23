@@ -3,8 +3,9 @@ package com.github.franckyi.wsc.network;
 import java.util.List;
 
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.google.common.base.Optional;
 
 import io.netty.buffer.ByteBuf;
@@ -27,22 +28,20 @@ public class RedstoneUnlinkingMessage implements IMessage {
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					List<MasterRedstoneSwitch> switches = RedstoneCapabilities.getControllerSwitches(world,
+					BaseRedstoneController controller = RedstoneCapabilities.getController(world,
 							message.controllerPos);
 					MasterRedstoneSwitch toRemove = null;
-					for (MasterRedstoneSwitch mls : switches)
+					for (MasterRedstoneSwitch mls : controller.getSwitches())
 						if (mls.getSwitchPos().equals(message.switchPos)) {
 							toRemove = mls;
 							break;
 						}
 					if (toRemove != null)
-						switches.remove(toRemove);
-					RedstoneCapabilities.setControllerSwitches(world, message.controllerPos, switches);
+						controller.getSwitches().remove(toRemove);
+					RedstoneCapabilities.setController(world, message.controllerPos, controller);
 					Optional<SlaveRedstoneSwitch> osls = RedstoneCapabilities.getSwitch(world, message.switchPos);
 					if (osls.isPresent()) {
 						osls.get().getControllerPos().remove(message.controllerPos);
-						if (osls.get().getControllerPos().isEmpty())
-							osls.get().setLinked(false);
 						RedstoneCapabilities.setSwitch(world, message.switchPos, osls.get());
 					}
 				}

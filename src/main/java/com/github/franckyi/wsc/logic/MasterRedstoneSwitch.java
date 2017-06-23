@@ -1,4 +1,4 @@
-package com.github.franckyi.wsc.util;
+package com.github.franckyi.wsc.logic;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -11,12 +11,12 @@ public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	public MasterRedstoneSwitch(BaseRedstoneSwitch ls, BlockPos pos) {
-		super(ls.isLinked(), ls.getName(), ls.isEnabled(), ls.getPower());
+		super(ls.getName(), ls.isEnabled(), ls.getPower());
 		this.switchPos = pos;
 	}
 
-	public MasterRedstoneSwitch(boolean linked, String name, boolean enabled, int power, BlockPos pos) {
-		super(linked, name, enabled, power);
+	public MasterRedstoneSwitch(String name, boolean enabled, int power, BlockPos pos) {
+		super(name, enabled, power);
 		this.switchPos = pos;
 	}
 

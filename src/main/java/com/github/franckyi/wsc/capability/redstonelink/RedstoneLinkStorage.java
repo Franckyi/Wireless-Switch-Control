@@ -1,6 +1,6 @@
 package com.github.franckyi.wsc.capability.redstonelink;
 
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;

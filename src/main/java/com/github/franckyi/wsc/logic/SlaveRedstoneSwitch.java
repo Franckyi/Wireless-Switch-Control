@@ -1,4 +1,4 @@
-package com.github.franckyi.wsc.util;
+package com.github.franckyi.wsc.logic;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,12 +17,12 @@ public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	public SlaveRedstoneSwitch(BaseRedstoneSwitch ls, Set<BlockPos> controllers) {
-		super(ls.isLinked(), ls.getName(), ls.isEnabled(), ls.getPower());
+		super(ls.getName(), ls.isEnabled(), ls.getPower());
 		this.controllerPos = controllers;
 	}
 
-	public SlaveRedstoneSwitch(boolean linked, String name, boolean enabled, int power, Set<BlockPos> controllers) {
-		super(linked, name, enabled, power);
+	public SlaveRedstoneSwitch(String name, boolean enabled, int power, Set<BlockPos> controllers) {
+		super(name, enabled, power);
 		this.controllerPos = controllers;
 	}
 

@@ -5,29 +5,30 @@ import java.util.List;
 
 import com.github.franckyi.wsc.capability.redstonecontroller.IRedstoneController;
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerProvider;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityRedstoneController extends TileEntity {
 
 	public TileEntityRedstoneController() {
-		setSwitches(new ArrayList<MasterRedstoneSwitch>());
+		setController(new BaseRedstoneController(new ArrayList<MasterRedstoneSwitch>()));
 		markDirty();
 
 	}
 
-	public List<MasterRedstoneSwitch> getSwitches() {
+	public BaseRedstoneController getController() {
 		IRedstoneController c = getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null);
 		if (c != null)
-			return c.getSwitches();
+			return c.getController();
 		return null;
 	}
 
-	public void setSwitches(List<MasterRedstoneSwitch> switches) {
+	public void setController(BaseRedstoneController controller) {
 		IRedstoneController c = getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null);
 		if (c != null)
-			c.setSwitches(switches);
+			c.setController(controller);
 
 	}
 
