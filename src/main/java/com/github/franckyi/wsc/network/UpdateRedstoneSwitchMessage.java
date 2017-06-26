@@ -2,6 +2,7 @@ package com.github.franckyi.wsc.network;
 
 import java.util.List;
 
+import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.logic.BaseRedstoneController;

@@ -24,6 +24,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BlockRedstoneSwitch extends Block {
 
@@ -44,8 +45,9 @@ public class BlockRedstoneSwitch extends Block {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		Optional<SlaveRedstoneSwitch> s = RedstoneCapabilities.getSwitch(world, pos);
 		if (s.isPresent())
-			for (BlockPos controllerPos : s.get().getControllerPos()) {
-				Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world, controllerPos);
+			for (final BlockPos controllerPos : s.get().getControllerPos()) {
+				final Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world,
+						controllerPos);
 				if (controller.isPresent()) {
 					Optional<MasterRedstoneSwitch> toRemove = Optional.absent();
 					for (MasterRedstoneSwitch controllerSwitch : controller.get().getSwitches()) {
@@ -56,10 +58,10 @@ public class BlockRedstoneSwitch extends Block {
 					}
 					if (toRemove.isPresent()) {
 						controller.get().getSwitches().remove(toRemove.get());
-						PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneControllerMessage(controllerPos, controller.get()));
+						PacketHandler.INSTANCE
+								.sendToAll(new UpdateRedstoneControllerMessage(controllerPos, controller.get()));
 					}
 				}
-
 			}
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);

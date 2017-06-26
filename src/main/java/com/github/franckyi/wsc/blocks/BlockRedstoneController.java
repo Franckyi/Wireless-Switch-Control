@@ -25,6 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BlockRedstoneController extends Block {
 
@@ -49,11 +50,14 @@ public class BlockRedstoneController extends Block {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world, pos);
 		if (controller.isPresent())
-			for (MasterRedstoneSwitch controllerSwitch : controller.get().getSwitches()) {
-				Optional<SlaveRedstoneSwitch> s = RedstoneCapabilities.getSwitch(world, controllerSwitch.getSwitchPos());
-				if(s.isPresent()) {
-					if (s.get().getControllerPos().remove(pos))
-						PacketHandler.INSTANCE.sendToServer(new UpdateRedstoneSwitchMessage(controllerSwitch.getSwitchPos(), s.get()));
+			for (final MasterRedstoneSwitch controllerSwitch : controller.get().getSwitches()) {
+				final Optional<SlaveRedstoneSwitch> s = RedstoneCapabilities.getSwitch(world,
+						controllerSwitch.getSwitchPos());
+				if (s.isPresent()) {
+					if (s.get().getControllerPos().remove(pos)) {
+						PacketHandler.INSTANCE
+								.sendToAll(new UpdateRedstoneSwitchMessage(controllerSwitch.getSwitchPos(), s.get()));
+					}
 				}
 			}
 		super.breakBlock(world, pos, state);
@@ -79,21 +83,26 @@ public class BlockRedstoneController extends Block {
 				IRedstoneLink link = RedstoneCapabilities.getLink(playerIn);
 				if (link.isPresent()) {
 					if (controller.get().getSwitches().size() < controller.get().getMaxSize()) {
-						for(MasterRedstoneSwitch s : controller.get().getSwitches())
-							if(link.getSwitch().getSwitchPos().equals(s.getSwitchPos())) {
+						for (MasterRedstoneSwitch s : controller.get().getSwitches())
+							if (link.getSwitch().getSwitchPos().equals(s.getSwitchPos())) {
 								ChatUtil.sendError(playerIn, "The switch is already linked to this controller !");
 								return true;
 							}
-						Optional<SlaveRedstoneSwitch> s = RedstoneCapabilities.getSwitch(worldIn, link.getSwitch().getSwitchPos());
-						if(s.isPresent()) {
+						Optional<SlaveRedstoneSwitch> s = RedstoneCapabilities.getSwitch(worldIn,
+								link.getSwitch().getSwitchPos());
+						if (s.isPresent()) {
 							controller.get().getSwitches().add(link.getSwitch());
-							PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneControllerMessage(pos, controller.get()));
+							PacketHandler.INSTANCE
+									.sendToAll(new UpdateRedstoneControllerMessage(pos, controller.get()));
 							s.get().getControllerPos().add(pos);
-							PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneSwitchMessage(link.getSwitch().getSwitchPos(), s.get()));
+							PacketHandler.INSTANCE.sendToAll(
+									new UpdateRedstoneSwitchMessage(link.getSwitch().getSwitchPos(), s.get()));
 							link.reset();
-							ChatUtil.sendSuccess(playerIn, "The switch '" + s.get().getName() + "' has been linked to this controller !");
+							ChatUtil.sendSuccess(playerIn,
+									"The switch '" + s.get().getName() + "' has been linked to this controller !");
 						} else
-							ChatUtil.sendError(playerIn, "Unable to get switch's data ! (it may have been broken during the linking process)");
+							ChatUtil.sendError(playerIn,
+									"Unable to get switch's data ! (it may have been broken during the linking process)");
 					} else
 						ChatUtil.sendError(playerIn, "The controller is full !");
 				} else
