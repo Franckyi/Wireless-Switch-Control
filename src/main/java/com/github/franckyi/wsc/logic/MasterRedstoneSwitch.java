@@ -25,8 +25,8 @@ public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	@Override
-	public void read(NBTTagCompound c) {
-		super.read(c);
+	public void deserializeNBT(NBTTagCompound c) {
+		super.deserializeNBT(c);
 		setSwitchPos(new BlockPos(c.getInteger("x"), c.getInteger("y"), c.getInteger("z")));
 	}
 
@@ -35,8 +35,8 @@ public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	@Override
-	public NBTTagCompound write() {
-		NBTTagCompound c = super.write();
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound c = super.serializeNBT();
 		c.setInteger("x", getSwitchPos().getX());
 		c.setInteger("y", getSwitchPos().getY());
 		c.setInteger("z", getSwitchPos().getZ());

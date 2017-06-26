@@ -19,24 +19,12 @@ public class RedstoneControllerStorage implements IStorage<IRedstoneController> 
 	@Override
 	public void readNBT(Capability<IRedstoneController> capability, IRedstoneController instance, EnumFacing side,
 			NBTBase nbt) {
-		NBTTagList list = (NBTTagList) nbt;
-		List<MasterRedstoneSwitch> switches = new ArrayList<MasterRedstoneSwitch>();
-		for (Iterator<NBTBase> i = list.iterator(); i.hasNext();) {
-			NBTTagCompound c = (NBTTagCompound) i.next();
-			MasterRedstoneSwitch mls = new MasterRedstoneSwitch();
-			mls.read(c);
-			switches.add(mls);
-		}
-		instance.setController(new BaseRedstoneController(switches));
-
+		instance.getController().deserializeNBT((NBTTagCompound) nbt);
 	}
 
 	@Override
 	public NBTBase writeNBT(Capability<IRedstoneController> capability, IRedstoneController instance, EnumFacing side) {
-		NBTTagList nbt = new NBTTagList();
-		for (MasterRedstoneSwitch mls : instance.getController().getSwitches())
-			nbt.appendTag(mls.write());
-		return nbt;
+		return instance.getController().serializeNBT();
 	}
 
 }

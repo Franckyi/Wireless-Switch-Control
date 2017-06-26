@@ -1,8 +1,9 @@
 package com.github.franckyi.wsc.logic;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public abstract class BaseRedstoneSwitch {
+public abstract class BaseRedstoneSwitch implements INBTSerializable<NBTTagCompound> {
 
 	private String name;
 	private boolean enabled;
@@ -29,7 +30,8 @@ public abstract class BaseRedstoneSwitch {
 		return enabled;
 	}
 
-	public void read(NBTTagCompound c) {
+	@Override
+	public void deserializeNBT(NBTTagCompound c) {
 		setName(c.getString("name"));
 		setEnabled(c.getBoolean("enabled"));
 		setPower(c.getInteger("power"));
@@ -47,12 +49,15 @@ public abstract class BaseRedstoneSwitch {
 		this.power = power;
 	}
 
-	public NBTTagCompound write() {
+	@Override
+	public NBTTagCompound serializeNBT() {
 		NBTTagCompound c = new NBTTagCompound();
 		c.setString("name", getName());
 		c.setBoolean("enabled", isEnabled());
 		c.setInteger("power", getPower());
 		return c;
 	}
+	
+	
 
 }

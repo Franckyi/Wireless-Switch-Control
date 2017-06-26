@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
-import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
+import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class GuiRedstoneSwitch extends GuiScreen {
 
@@ -33,7 +32,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 			sls.setName(name.getText());
 			sls.setPower(power.getPower().getInt());
 			sls.setEnabled(enabled.value());
-			PacketHandler.INSTANCE.sendToServer(new RedstoneSwitchDataMessage(Side.CLIENT, sls, pos, false));
+			PacketHandler.INSTANCE.sendToServer(new UpdateRedstoneSwitchMessage(pos, sls));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);

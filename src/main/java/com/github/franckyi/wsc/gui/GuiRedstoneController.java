@@ -8,8 +8,8 @@ import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.logic.BaseRedstoneController;
 import com.github.franckyi.wsc.logic.BaseRedstoneSwitch;
 import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
-import com.github.franckyi.wsc.network.RedstoneControllerDataMessage;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
+import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.GuiScrollingList;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class GuiRedstoneController extends GuiScreen {
 
@@ -115,7 +114,7 @@ public class GuiRedstoneController extends GuiScreen {
 		if (button == done) {
 			if (selected != -1)
 				saveCache();
-			PacketHandler.INSTANCE.sendToServer(new RedstoneControllerDataMessage(Side.CLIENT, controller, pos, false));
+			PacketHandler.INSTANCE.sendToServer(new UpdateRedstoneControllerMessage(pos, controller));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);

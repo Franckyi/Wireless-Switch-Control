@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityRedstoneController extends TileEntity {
 
 	public TileEntityRedstoneController() {
-		setController(new BaseRedstoneController(new ArrayList<MasterRedstoneSwitch>()));
+		setController(new BaseRedstoneController(new ArrayList<MasterRedstoneSwitch>(), 4));
 		markDirty();
 
 	}

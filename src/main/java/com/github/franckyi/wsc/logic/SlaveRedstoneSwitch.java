@@ -7,6 +7,7 @@ import java.util.Set;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.math.BlockPos;
 
 public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
@@ -31,14 +32,12 @@ public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	@Override
-	public void read(NBTTagCompound c) {
-		super.read(c);
+	public void deserializeNBT(NBTTagCompound c) {
+		super.deserializeNBT(c);
 		setControllerPos(new HashSet<BlockPos>());
-		NBTTagList l = c.getTagList("controllers", 10);
-		for (Iterator<NBTBase> i = l.iterator(); i.hasNext();) {
-			NBTTagCompound c2 = (NBTTagCompound) i.next();
-			controllerPos.add(new BlockPos(c2.getInteger("x"), c2.getInteger("y"), c2.getInteger("z")));
-		}
+		NBTTagList l = c.getTagList("controllers", 4);
+		for (Iterator<NBTBase> i = l.iterator(); i.hasNext();)
+			controllerPos.add(BlockPos.fromLong(((NBTTagLong) i.next()).getLong()));
 	}
 
 	public void setControllerPos(Set<BlockPos> controllers) {
@@ -46,16 +45,11 @@ public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	@Override
-	public NBTTagCompound write() {
-		NBTTagCompound c = super.write();
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound c = super.serializeNBT();
 		NBTTagList l = new NBTTagList();
-		for (BlockPos pos : getControllerPos()) {
-			NBTTagCompound c2 = new NBTTagCompound();
-			c2.setInteger("x", pos.getX());
-			c2.setInteger("y", pos.getY());
-			c2.setInteger("z", pos.getZ());
-			l.appendTag(c2);
-		}
+		for (BlockPos pos : getControllerPos())
+			l.appendTag(new NBTTagLong(pos.toLong()));
 		c.setTag("controllers", l);
 		return c;
 	}

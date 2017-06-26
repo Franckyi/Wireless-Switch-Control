@@ -42,31 +42,27 @@ public class RedstoneCapabilities {
 
 	public static void setController(IBlockAccess world, BlockPos pos, BaseRedstoneController controller) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityRedstoneController) {
+		if (te != null && te instanceof TileEntityRedstoneController)
 			((TileEntityRedstoneController) te).setController(controller);
-			updateTileEntity(world, pos);
-		}
 	}
 
 	public static void setSwitch(IBlockAccess world, BlockPos pos, SlaveRedstoneSwitch sls) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityRedstoneSwitch) {
+		if (te != null && te instanceof TileEntityRedstoneSwitch)
 			((TileEntityRedstoneSwitch) te).setSwitch(sls);
-			updateTileEntity(world, pos);
-		}
 	}
-
-	public static void updateSwitch(IBlockAccess world, BlockPos pos, BaseRedstoneSwitch ls1) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityRedstoneSwitch) {
-			SlaveRedstoneSwitch sls = ((TileEntityRedstoneSwitch) te).getSwitch();
-			((TileEntityRedstoneSwitch) te).setSwitch(new SlaveRedstoneSwitch(ls1, sls.getControllerPos()));
-			updateTileEntity(world, pos);
-		}
-	}
-
-	public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
-		world.getTileEntity(pos).markDirty();
-	}
+//
+//	public static void updateSwitch(IBlockAccess world, BlockPos pos, BaseRedstoneSwitch ls1) {
+//		TileEntity te = world.getTileEntity(pos);
+//		if (te != null && te instanceof TileEntityRedstoneSwitch) {
+//			SlaveRedstoneSwitch sls = ((TileEntityRedstoneSwitch) te).getSwitch();
+//			((TileEntityRedstoneSwitch) te).setSwitch(new SlaveRedstoneSwitch(ls1, sls.getControllerPos()));
+//			updateTileEntity(world, pos);
+//		}
+//	}
+//
+//	public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
+//		world.getTileEntity(pos).markDirty();
+//	}
 
 }
