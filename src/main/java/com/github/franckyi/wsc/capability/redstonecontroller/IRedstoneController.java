@@ -1,13 +1,11 @@
 package com.github.franckyi.wsc.capability.redstonecontroller;
 
-import java.util.List;
-
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
 
 public interface IRedstoneController {
 
-	public List<MasterRedstoneSwitch> getSwitches();
+	public BaseRedstoneController getController();
 
-	public void setSwitches(List<MasterRedstoneSwitch> switches);
+	public void setController(BaseRedstoneController controller);
 
 }

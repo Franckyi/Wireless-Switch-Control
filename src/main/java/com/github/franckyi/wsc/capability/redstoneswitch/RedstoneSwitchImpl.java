@@ -1,6 +1,6 @@
 package com.github.franckyi.wsc.capability.redstoneswitch;
 
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 
 public class RedstoneSwitchImpl implements IRedstoneSwitch {
 

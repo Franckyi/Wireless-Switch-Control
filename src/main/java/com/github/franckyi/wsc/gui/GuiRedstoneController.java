@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.franckyi.wsc.handlers.PacketHandler;
-import com.github.franckyi.wsc.network.RedstoneControllerDataMessage;
+import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.BaseRedstoneSwitch;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
-import com.github.franckyi.wsc.util.BaseRedstoneSwitch;
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,7 +18,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.GuiScrollingList;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class GuiRedstoneController extends GuiScreen {
 
@@ -61,7 +61,7 @@ public class GuiRedstoneController extends GuiScreen {
 
 		@Override
 		protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
-			MasterRedstoneSwitch mls = switches.get(slotIdx);
+			MasterRedstoneSwitch mls = controller.getSwitches().get(slotIdx);
 			String name = StringUtils.stripControlCodes(mls.getName());
 			drawCenteredString(fontRenderer, name, this.left + this.listWidth / 2 - 4, slotTop + 3,
 					(mls.isEnabled()) ? 0x55FF55 : 0xFF5555);
@@ -81,7 +81,7 @@ public class GuiRedstoneController extends GuiScreen {
 
 		@Override
 		protected int getSize() {
-			return switches.size();
+			return controller.getSwitches().size();
 		}
 
 		@Override
@@ -91,7 +91,7 @@ public class GuiRedstoneController extends GuiScreen {
 
 	}
 
-	private List<MasterRedstoneSwitch> switches;
+	private BaseRedstoneController controller;
 	private BlockPos pos;
 	private int selected = -1;
 
@@ -104,8 +104,8 @@ public class GuiRedstoneController extends GuiScreen {
 
 	private List<GraphicalSwitch> gswitches = new ArrayList<GraphicalSwitch>();
 
-	public GuiRedstoneController(List<MasterRedstoneSwitch> switches, BlockPos pos) {
-		this.switches = switches;
+	public GuiRedstoneController(BaseRedstoneController controller, BlockPos pos) {
+		this.controller = controller;
 		this.pos = pos;
 	}
 
@@ -114,7 +114,7 @@ public class GuiRedstoneController extends GuiScreen {
 		if (button == done) {
 			if (selected != -1)
 				saveCache();
-			PacketHandler.INSTANCE.sendToServer(new RedstoneControllerDataMessage(Side.CLIENT, switches, pos, false));
+			PacketHandler.INSTANCE.sendToServer(new UpdateRedstoneControllerMessage(pos, controller));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);
@@ -124,7 +124,7 @@ public class GuiRedstoneController extends GuiScreen {
 		boolean unlinking = false;
 		for (GraphicalSwitch gs : gswitches) {
 			if (button == gs.enabledButton) {
-				switches.get(selected).setEnabled(gs.enabledButton.value());
+				controller.getSwitches().get(selected).setEnabled(gs.enabledButton.value());
 				break;
 			}
 			if (button == gs.unlinkButton) {
@@ -133,12 +133,12 @@ public class GuiRedstoneController extends GuiScreen {
 				break;
 			}
 			if (button == gs.power.getAdd() || button == gs.power.getSubstract()) {
-				switches.get(selected).setPower(gs.power.getPower().getInt());
+				controller.getSwitches().get(selected).setPower(gs.power.getPower().getInt());
 			}
 		}
 		if (unlinking) {
 			selectedGSwitch.setVisible(false);
-			switches.remove(selected);
+			controller.getSwitches().remove(selected);
 			gswitches.remove(selected);
 			selectedGSwitch = null;
 			selectedSwitch = null;
@@ -174,7 +174,7 @@ public class GuiRedstoneController extends GuiScreen {
 	@Override
 	public void initGui() {
 		int i = 0;
-		for (BaseRedstoneSwitch ls : switches) {
+		for (BaseRedstoneSwitch ls : controller.getSwitches()) {
 			GraphicalSwitch gs = new GraphicalSwitch(ls, i++);
 			gswitches.add(gs);
 			buttonList.add(gs.enabledButton);
@@ -218,7 +218,9 @@ public class GuiRedstoneController extends GuiScreen {
 		if (selected != -1)
 			this.selectedGSwitch.setVisible(false);
 		this.selected = index;
-		this.selectedSwitch = (index >= 0 && index <= switches.size()) ? switches.get(selected) : null;
+		this.selectedSwitch = (index >= 0 && index <= controller.getSwitches().size())
+				? controller.getSwitches().get(selected)
+				: null;
 		this.selectedGSwitch = (index >= 0 && index <= gswitches.size()) ? gswitches.get(selected) : null;
 		if (selected != -1)
 			this.selectedGSwitch.setVisible(true);
