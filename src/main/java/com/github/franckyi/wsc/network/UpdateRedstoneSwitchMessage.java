@@ -57,7 +57,6 @@ public class UpdateRedstoneSwitchMessage implements IMessage {
 			PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneControllerMessage(updateControllers));
 			PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneSwitchMessage(updateSwitches));
 		}
-
 	}
 
 	private Set<FullRedstoneSwitch> switches;

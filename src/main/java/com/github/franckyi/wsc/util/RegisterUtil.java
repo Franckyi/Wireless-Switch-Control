@@ -1,5 +1,6 @@
 package com.github.franckyi.wsc.util;
 
+import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.redstonecontroller.IRedstoneController;
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneController;
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerStorage;
@@ -11,8 +12,10 @@ import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchImpl;
 import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchStorage;
 import com.github.franckyi.wsc.handlers.CapabilityHandler;
 import com.github.franckyi.wsc.handlers.EventHandler;
+import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
+import com.github.franckyi.wsc.init.ModItems;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
@@ -21,33 +24,31 @@ import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class RegisterUtil {
 
-	private static void registerBlocks(FMLPreInitializationEvent e, Block... blocks) {
-		for (Block block : blocks) {
+	public static void registerBlocks() {
+		for (Block block : ModBlocks.BLOCKS) {
 			final ItemBlock itemblock = new ItemBlock(block);
 			itemblock.setRegistryName(block.getRegistryName());
 			ForgeRegistries.BLOCKS.register(block);
 			ForgeRegistries.ITEMS.register(itemblock);
-			if (e.getSide() == Side.CLIENT) {
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-						new ModelResourceLocation(block.getRegistryName(), "inventory"));
-			}
 		}
 	}
 
-	private static void registerCapabilities() {
+	public static void registerCapabilities() {
 		CapabilityManager.INSTANCE.register(IRedstoneLink.class, new RedstoneLinkStorage(), RedstoneLinkImpl.class);
 		CapabilityManager.INSTANCE.register(IRedstoneController.class, new RedstoneControllerStorage(),
 				RedstoneController.class);
@@ -55,47 +56,44 @@ public class RegisterUtil {
 				RedstoneSwitchImpl.class);
 	}
 
-	private static void registerEventHandlers() {
+	public static void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
-	public static void registerInit(FMLInitializationEvent e) {
-		registerEventHandlers();
-		registerMessages();
+	public static void registerGuiHandler() {
+		NetworkRegistry.INSTANCE.registerGuiHandler(WSCMod.instance, new GuiHandler());
 	}
 
-	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
-		for (Item item : items) {
+	public static void registerItems() {
+		for (Item item : ModItems.ITEMS)
 			ForgeRegistries.ITEMS.register(item);
-			if (e.getSide() == Side.CLIENT) {
-				ModelLoader.setCustomModelResourceLocation(item, 0,
-						new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			}
-		}
 	}
 
-	private static void registerMessages() {
+	public static void registerMessages() {
 		PacketHandler.INSTANCE.registerMessage(RedstoneUnlinkingMessage.ServerHandler.class,
 				RedstoneUnlinkingMessage.class, 0, Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneSwitchMessage.ClientHandler.class,
-				UpdateRedstoneSwitchMessage.class, 1, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneSwitchMessage.ServerHandler.class,
-				UpdateRedstoneSwitchMessage.class, 2, Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneControllerMessage.ClientHandler.class,
-				UpdateRedstoneControllerMessage.class, 3, Side.CLIENT);
+				UpdateRedstoneSwitchMessage.class, 1, Side.SERVER);
 		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneControllerMessage.ServerHandler.class,
-				UpdateRedstoneControllerMessage.class, 4, Side.SERVER);
+				UpdateRedstoneControllerMessage.class, 2, Side.SERVER);
+
+		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneSwitchMessage.ClientHandler.class,
+				UpdateRedstoneSwitchMessage.class, 3, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneControllerMessage.ClientHandler.class,
+				UpdateRedstoneControllerMessage.class, 4, Side.CLIENT);
 	}
 
-	public static void registerPreInit(FMLPreInitializationEvent e) {
-		registerBlocks(e, ModBlocks.REDSTONE_CONTROLLER, ModBlocks.REDSTONE_SWITCH);
-		registerItems(e);
-		registerTileEntities();
-		registerCapabilities();
+	public static void registerRenders() {
+		for (Block block : ModBlocks.BLOCKS)
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+					new ModelResourceLocation(block.getRegistryName(), "inventory"));
+		for (Item item : ModItems.ITEMS)
+			ModelLoader.setCustomModelResourceLocation(item, 0,
+					new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 
-	private static void registerTileEntities() {
+	public static void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityRedstoneController.class, "controller_tile_entity");
 		GameRegistry.registerTileEntity(TileEntityRedstoneSwitch.class, "switch_tile_entity");
 	}

@@ -14,4 +14,6 @@ public class ModBlocks {
 	public static final Block REDSTONE_SWITCH = new BlockRedstoneSwitch("redstone_switch", Material.IRON,
 			CreativeTabs.REDSTONE, 5F, 15F, "pickaxe", 1, 0.3F);
 
+	public static final Block[] BLOCKS = { REDSTONE_CONTROLLER, REDSTONE_SWITCH };
+
 }

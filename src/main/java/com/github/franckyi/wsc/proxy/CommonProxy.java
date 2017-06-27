@@ -1,34 +1,41 @@
 package com.github.franckyi.wsc.proxy;
 
-import com.github.franckyi.wsc.WSCMod;
-import com.github.franckyi.wsc.handlers.GuiHandler;
+import com.github.franckyi.wsc.handlers.PacketHandler.ClientHandler;
+import com.github.franckyi.wsc.handlers.PacketHandler.ServerHandler;
 import com.github.franckyi.wsc.util.RegisterUtil;
 
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class CommonProxy {
+public class CommonProxy implements IProxy {
 
-	public void init(FMLInitializationEvent e) {
-		RegisterUtil.registerInit(e);
-		NetworkRegistry.INSTANCE.registerGuiHandler(WSCMod.instance, new GuiHandler());
+	@Override
+	public void clientHandler(ClientHandler<? extends IMessage> clientHandler, MessageContext ctx) {
 	}
 
-	public void postInit(FMLPostInitializationEvent e) {
+	@Override
+	public void init(FMLInitializationEvent event) {
+		RegisterUtil.registerEventHandlers();
+		RegisterUtil.registerMessages();
+		RegisterUtil.registerGuiHandler();
 	}
 
-	public void preInit(FMLPreInitializationEvent e) {
-		RegisterUtil.registerPreInit(e);
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+		RegisterUtil.registerBlocks();
+		RegisterUtil.registerItems();
+		RegisterUtil.registerTileEntities();
+		RegisterUtil.registerCapabilities();
 	}
 
-	public void serverStarting(FMLServerStartingEvent e) {
-	}
-
-	public void serverStopping(FMLServerStoppingEvent e) {
+	@Override
+	public void serverHandler(ServerHandler<? extends IMessage> serverHandler, MessageContext ctx) {
+		serverHandler.world = ctx.getServerHandler().player.world;
+		serverHandler.mainThread = (WorldServer) serverHandler.world;
+		serverHandler.mainThread.addScheduledTask(serverHandler);
 	}
 
 }

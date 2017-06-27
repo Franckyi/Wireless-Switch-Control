@@ -23,12 +23,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BlockRedstoneController extends Block {
 
@@ -62,7 +64,14 @@ public class BlockRedstoneController extends Block {
 						updateSwitches.add(new FullRedstoneSwitch(s.get(), controllerSwitch.getSwitchPos()));
 				}
 			}
-			PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneSwitchMessage(updateSwitches));
+			WorldServer worldServer = (WorldServer) world;
+			for (EntityPlayer player : worldServer.playerEntities) {
+				EntityPlayerMP playerMP = (EntityPlayerMP) player;
+				if (worldServer.getPlayerChunkMap()
+						.getEntry(world.getChunkFromBlockCoords(pos).x, world.getChunkFromBlockCoords(pos).z)
+						.containsPlayer(playerMP))
+					PacketHandler.INSTANCE.sendTo(new UpdateRedstoneSwitchMessage(updateSwitches), playerMP);
+			}
 		}
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
