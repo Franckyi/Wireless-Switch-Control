@@ -3,14 +3,13 @@ package com.github.franckyi.wsc.gui;
 import java.io.IOException;
 
 import com.github.franckyi.wsc.handlers.PacketHandler;
-import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
+import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class GuiRedstoneSwitch extends GuiScreen {
 
@@ -33,7 +32,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 			sls.setName(name.getText());
 			sls.setPower(power.getPower().getInt());
 			sls.setEnabled(enabled.value());
-			PacketHandler.INSTANCE.sendToServer(new RedstoneSwitchDataMessage(Side.CLIENT, sls, pos, false));
+			PacketHandler.INSTANCE.sendToServer(new UpdateRedstoneSwitchMessage(pos, sls));
 		}
 		if (button == done || button == cancel) {
 			mc.displayGuiScreen(null);
@@ -46,7 +45,7 @@ public class GuiRedstoneSwitch extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(fontRenderer, "Redstone Switch", width / 2, 20, 0xffffff);
-		if (sls.isLinked())
+		if (sls.getControllerPos().size() != 0)
 			this.drawCenteredString(fontRenderer, "This switch is linked to " + sls.getControllerPos().size()
 					+ " controller" + ((sls.getControllerPos().size() > 1) ? "s." : "."), width / 2, 50, 0x55FF55);
 		else

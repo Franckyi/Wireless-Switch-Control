@@ -1,6 +1,6 @@
 package com.github.franckyi.wsc.capability.redstonelink;
 
-import com.github.franckyi.wsc.util.MasterRedstoneSwitch;
+import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 
 public class RedstoneLinkImpl implements IRedstoneLink {
 
