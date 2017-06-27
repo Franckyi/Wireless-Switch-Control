@@ -4,7 +4,7 @@ public class ModReference {
 
 	public static final String MODID = "wsc";
 	public static final String NAME = "Wireless Switch Control";
-	public static final String VERSION = "0.0.1-SNAPSHOT2";
+	public static final String VERSION = "0.0.1";
 	public static final String MCVERSIONS = "[1.12]";
 
 	public static final String CLIENTPROXY = "com.github.franckyi.wsc.proxy.ClientProxy";

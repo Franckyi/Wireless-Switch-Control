@@ -13,12 +13,9 @@ import com.github.franckyi.wsc.handlers.CapabilityHandler;
 import com.github.franckyi.wsc.handlers.EventHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
-import com.github.franckyi.wsc.network.RedstoneControllerDataMessage;
-import com.github.franckyi.wsc.network.RedstoneControllerDataMessage.ControllerDataMessageHandler;
-import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage;
-import com.github.franckyi.wsc.network.RedstoneSwitchDataMessage.SwitchDataMessageHandler;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
-import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage.UnlinkingMessageHandler;
+import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
+import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 
@@ -31,6 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -39,9 +37,10 @@ public class RegisterUtil {
 	private static void registerBlocks(FMLPreInitializationEvent e, Block... blocks) {
 		for (Block block : blocks) {
 			final ItemBlock itemblock = new ItemBlock(block);
+			itemblock.setRegistryName(block.getRegistryName());
+			ForgeRegistries.BLOCKS.register(block);
+			ForgeRegistries.ITEMS.register(itemblock);
 			if (e.getSide() == Side.CLIENT) {
-				GameRegistry.register(block);
-				GameRegistry.register(itemblock, block.getRegistryName());
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
 						new ModelResourceLocation(block.getRegistryName(), "inventory"));
 			}
@@ -68,8 +67,8 @@ public class RegisterUtil {
 
 	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
 		for (Item item : items) {
+			ForgeRegistries.ITEMS.register(item);
 			if (e.getSide() == Side.CLIENT) {
-				GameRegistry.register(item);
 				ModelLoader.setCustomModelResourceLocation(item, 0,
 						new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
@@ -77,16 +76,16 @@ public class RegisterUtil {
 	}
 
 	private static void registerMessages() {
-		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 0,
-				Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(SwitchDataMessageHandler.class, RedstoneSwitchDataMessage.class, 1,
-				Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class,
-				2, Side.CLIENT);
-		PacketHandler.INSTANCE.registerMessage(ControllerDataMessageHandler.class, RedstoneControllerDataMessage.class,
-				3, Side.SERVER);
-		PacketHandler.INSTANCE.registerMessage(UnlinkingMessageHandler.class, RedstoneUnlinkingMessage.class, 4,
-				Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(RedstoneUnlinkingMessage.ServerHandler.class,
+				RedstoneUnlinkingMessage.class, 0, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneSwitchMessage.ClientHandler.class,
+				UpdateRedstoneSwitchMessage.class, 1, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneSwitchMessage.ServerHandler.class,
+				UpdateRedstoneSwitchMessage.class, 2, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneControllerMessage.ClientHandler.class,
+				UpdateRedstoneControllerMessage.class, 3, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(UpdateRedstoneControllerMessage.ServerHandler.class,
+				UpdateRedstoneControllerMessage.class, 4, Side.SERVER);
 	}
 
 	public static void registerPreInit(FMLPreInitializationEvent e) {

@@ -3,8 +3,8 @@ package com.github.franckyi.wsc.waila;
 import java.util.List;
 
 import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchProvider;
+import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
-import com.github.franckyi.wsc.util.SlaveRedstoneSwitch;
 
 import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -35,8 +35,9 @@ public class RedstoneSwitchDataProvider implements IWailaDataProvider {
 		TileEntity tile = accessor.getTileEntity();
 		if (tile instanceof TileEntityRedstoneSwitch) {
 			SlaveRedstoneSwitch sls = tile.getCapability(RedstoneSwitchProvider.SWITCH_CAP, null).getSwitch();
-			currenttip.add((sls.isLinked() ? "§a" : "§c") + "Linked : " + String.valueOf(sls.isLinked())
-					+ (sls.isLinked() ? " (" + sls.getControllerPos().size() + ")§r" : "§r"));
+			currenttip.add((sls.getControllerPos().size() != 0 ? "§a" : "§c") + "Linked : "
+					+ String.valueOf(sls.getControllerPos().size() != 0)
+					+ (sls.getControllerPos().size() != 0 ? " (" + sls.getControllerPos().size() + ")§r" : "§r"));
 			currenttip.add("Name : " + sls.getName());
 			currenttip.add((sls.isEnabled() ? "§a" : "§c") + "Enabled : " + String.valueOf(sls.isEnabled()) + "§r");
 			currenttip.add("Power : [" + String.valueOf(sls.getPower()) + "]");

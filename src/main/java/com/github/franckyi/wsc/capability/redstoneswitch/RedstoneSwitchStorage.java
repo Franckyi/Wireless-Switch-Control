@@ -11,12 +11,12 @@ public class RedstoneSwitchStorage implements IStorage<IRedstoneSwitch> {
 	@Override
 	public void readNBT(Capability<IRedstoneSwitch> capability, IRedstoneSwitch instance, EnumFacing side,
 			NBTBase nbt) {
-		instance.getSwitch().read((NBTTagCompound) nbt);
+		instance.getSwitch().deserializeNBT((NBTTagCompound) nbt);
 	}
 
 	@Override
 	public NBTBase writeNBT(Capability<IRedstoneSwitch> capability, IRedstoneSwitch instance, EnumFacing side) {
-		return instance.getSwitch().write();
+		return instance.getSwitch().serializeNBT();
 	}
 
 }
