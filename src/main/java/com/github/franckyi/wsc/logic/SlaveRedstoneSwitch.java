@@ -17,18 +17,13 @@ public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 	public SlaveRedstoneSwitch() {
 	}
 
-	public SlaveRedstoneSwitch(BaseRedstoneSwitch ls, Set<BlockPos> controllers) {
-		super(ls.getName(), ls.isEnabled(), ls.getPower());
-		this.controllerPos = controllers;
+	public SlaveRedstoneSwitch(BaseRedstoneSwitch ls, Set<BlockPos> controllerPos) {
+		this(ls.getName(), ls.isEnabled(), ls.getPower(), controllerPos);
 	}
 
-	public SlaveRedstoneSwitch(String name, boolean enabled, int power, Set<BlockPos> controllers) {
+	public SlaveRedstoneSwitch(String name, boolean enabled, int power, Set<BlockPos> controllerPos) {
 		super(name, enabled, power);
-		this.controllerPos = controllers;
-	}
-
-	public Set<BlockPos> getControllerPos() {
-		return controllerPos;
+		this.controllerPos = controllerPos;
 	}
 
 	@Override
@@ -40,8 +35,8 @@ public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 			controllerPos.add(BlockPos.fromLong(((NBTTagLong) i.next()).getLong()));
 	}
 
-	public void setControllerPos(Set<BlockPos> controllers) {
-		this.controllerPos = controllers;
+	public Set<BlockPos> getControllerPos() {
+		return controllerPos;
 	}
 
 	@Override
@@ -52,6 +47,10 @@ public class SlaveRedstoneSwitch extends BaseRedstoneSwitch {
 			l.appendTag(new NBTTagLong(pos.toLong()));
 		c.setTag("controllers", l);
 		return c;
+	}
+
+	public void setControllerPos(Set<BlockPos> controllers) {
+		this.controllerPos = controllers;
 	}
 
 }

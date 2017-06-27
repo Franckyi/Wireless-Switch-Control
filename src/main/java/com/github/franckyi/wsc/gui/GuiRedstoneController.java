@@ -218,7 +218,9 @@ public class GuiRedstoneController extends GuiScreen {
 		if (selected != -1)
 			this.selectedGSwitch.setVisible(false);
 		this.selected = index;
-		this.selectedSwitch = (index >= 0 && index <= controller.getSwitches().size()) ? controller.getSwitches().get(selected) : null;
+		this.selectedSwitch = (index >= 0 && index <= controller.getSwitches().size())
+				? controller.getSwitches().get(selected)
+				: null;
 		this.selectedGSwitch = (index >= 0 && index <= gswitches.size()) ? gswitches.get(selected) : null;
 		if (selected != -1)
 			this.selectedGSwitch.setVisible(true);

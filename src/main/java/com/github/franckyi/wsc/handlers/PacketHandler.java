@@ -14,10 +14,22 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public class PacketHandler {
 
-	public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModReference.MODID);
-	
-	public static abstract class CommonHandler<REQ extends IMessage, REPLY extends IMessage> implements IMessageHandler<REQ, REPLY>, Runnable {
-		
+	public static abstract class ClientHandler<REQ extends IMessage> extends CommonHandler<REQ, IMessage> {
+
+		@Override
+		public IMessage onMessage(REQ message, MessageContext ctx) {
+			super.onMessage(message, ctx);
+			this.world = Minecraft.getMinecraft().world;
+			this.mainThread = Minecraft.getMinecraft();
+			this.mainThread.addScheduledTask(this);
+			return null;
+		}
+
+	}
+
+	public static abstract class CommonHandler<REQ extends IMessage, REPLY extends IMessage>
+			implements IMessageHandler<REQ, REPLY>, Runnable {
+
 		protected World world;
 		protected IThreadListener mainThread;
 		protected REQ message;
@@ -30,9 +42,9 @@ public class PacketHandler {
 			this.ctx = ctx;
 			return reply;
 		}
-		
+
 	}
-	
+
 	public static abstract class ServerHandler<REQ extends IMessage> extends CommonHandler<REQ, IMessage> {
 
 		@Override
@@ -43,22 +55,9 @@ public class PacketHandler {
 			this.mainThread.addScheduledTask(this);
 			return null;
 		}
-		
-	}
-	
-	public static abstract class ClientHandler<REQ extends IMessage> extends CommonHandler<REQ, IMessage> {
 
-		@Override
-		public IMessage onMessage(REQ message, MessageContext ctx) {
-			super.onMessage(message, ctx);
-			this.world = Minecraft.getMinecraft().world;
-			this.mainThread = Minecraft.getMinecraft();
-			this.mainThread.addScheduledTask(this);
-			return null;
-		}
-		
 	}
-	
-	
+
+	public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModReference.MODID);
 
 }

@@ -22,14 +22,9 @@ public class RedstoneControllerDataProvider implements IWailaDataProvider {
 	public static final RedstoneControllerDataProvider INSTANCE = new RedstoneControllerDataProvider();
 
 	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return null;
-	}
-
-	@Override
-	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
-			IWailaConfigHandler config) {
-		return currenttip;
+	public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world,
+			BlockPos pos) {
+		return tag;
 	}
 
 	@Override
@@ -39,7 +34,8 @@ public class RedstoneControllerDataProvider implements IWailaDataProvider {
 		if (tile instanceof TileEntityRedstoneController) {
 			BaseRedstoneController controller = tile.getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null)
 					.getController();
-			currenttip.add((controller.getSwitches().size() != 0 ? "Linked switches : (" : "No switch linked (") + controller.getSwitches().size() + "/" + controller.getMaxSize() + ")");
+			currenttip.add((controller.getSwitches().size() != 0 ? "Linked switches : (" : "No switch linked (")
+					+ controller.getSwitches().size() + "/" + controller.getMaxSize() + ")");
 			for (MasterRedstoneSwitch mls : controller.getSwitches())
 				currenttip.add(" - " + (mls.isEnabled() ? "§a" : "§c") + mls.getName() + " ["
 						+ String.valueOf(mls.getPower()) + "]§r");
@@ -48,15 +44,20 @@ public class RedstoneControllerDataProvider implements IWailaDataProvider {
 	}
 
 	@Override
-	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
+	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
 			IWailaConfigHandler config) {
 		return currenttip;
 	}
 
 	@Override
-	public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world,
-			BlockPos pos) {
-		return tag;
+	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return null;
+	}
+
+	@Override
+	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
+			IWailaConfigHandler config) {
+		return currenttip;
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.github.franckyi.wsc.tileentity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.github.franckyi.wsc.capability.redstonecontroller.IRedstoneController;
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerProvider;

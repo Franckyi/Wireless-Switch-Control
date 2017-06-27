@@ -1,11 +1,15 @@
 package com.github.franckyi.wsc.blocks;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.RedstoneCapabilities;
 import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.logic.BaseRedstoneController;
+import com.github.franckyi.wsc.logic.FullRedstoneSwitch;
 import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
@@ -25,7 +29,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class BlockRedstoneController extends Block {
 
@@ -49,17 +52,18 @@ public class BlockRedstoneController extends Block {
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world, pos);
-		if (controller.isPresent())
+		if (controller.isPresent()) {
+			Set<FullRedstoneSwitch> updateSwitches = new HashSet<FullRedstoneSwitch>();
 			for (final MasterRedstoneSwitch controllerSwitch : controller.get().getSwitches()) {
 				final Optional<SlaveRedstoneSwitch> s = RedstoneCapabilities.getSwitch(world,
 						controllerSwitch.getSwitchPos());
 				if (s.isPresent()) {
-					if (s.get().getControllerPos().remove(pos)) {
-						PacketHandler.INSTANCE
-								.sendToAll(new UpdateRedstoneSwitchMessage(controllerSwitch.getSwitchPos(), s.get()));
-					}
+					if (s.get().getControllerPos().remove(pos))
+						updateSwitches.add(new FullRedstoneSwitch(s.get(), controllerSwitch.getSwitchPos()));
 				}
 			}
+			PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneSwitchMessage(updateSwitches));
+		}
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
 	}

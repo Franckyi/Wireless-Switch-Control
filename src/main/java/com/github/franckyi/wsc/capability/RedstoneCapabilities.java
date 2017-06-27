@@ -1,13 +1,8 @@
 package com.github.franckyi.wsc.capability;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.github.franckyi.wsc.capability.redstonelink.IRedstoneLink;
 import com.github.franckyi.wsc.capability.redstonelink.RedstoneLinkProvider;
 import com.github.franckyi.wsc.logic.BaseRedstoneController;
-import com.github.franckyi.wsc.logic.BaseRedstoneSwitch;
-import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
@@ -51,18 +46,20 @@ public class RedstoneCapabilities {
 		if (te != null && te instanceof TileEntityRedstoneSwitch)
 			((TileEntityRedstoneSwitch) te).setSwitch(sls);
 	}
-//
-//	public static void updateSwitch(IBlockAccess world, BlockPos pos, BaseRedstoneSwitch ls1) {
-//		TileEntity te = world.getTileEntity(pos);
-//		if (te != null && te instanceof TileEntityRedstoneSwitch) {
-//			SlaveRedstoneSwitch sls = ((TileEntityRedstoneSwitch) te).getSwitch();
-//			((TileEntityRedstoneSwitch) te).setSwitch(new SlaveRedstoneSwitch(ls1, sls.getControllerPos()));
-//			updateTileEntity(world, pos);
-//		}
-//	}
-//
-//	public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
-//		world.getTileEntity(pos).markDirty();
-//	}
+	//
+	// public static void updateSwitch(IBlockAccess world, BlockPos pos,
+	// BaseRedstoneSwitch ls1) {
+	// TileEntity te = world.getTileEntity(pos);
+	// if (te != null && te instanceof TileEntityRedstoneSwitch) {
+	// SlaveRedstoneSwitch sls = ((TileEntityRedstoneSwitch) te).getSwitch();
+	// ((TileEntityRedstoneSwitch) te).setSwitch(new SlaveRedstoneSwitch(ls1,
+	// sls.getControllerPos()));
+	// updateTileEntity(world, pos);
+	// }
+	// }
+	//
+	// public static void updateTileEntity(IBlockAccess world, BlockPos pos) {
+	// world.getTileEntity(pos).markDirty();
+	// }
 
 }

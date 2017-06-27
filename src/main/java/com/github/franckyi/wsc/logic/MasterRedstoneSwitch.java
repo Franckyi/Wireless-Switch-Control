@@ -11,8 +11,7 @@ public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 	}
 
 	public MasterRedstoneSwitch(BaseRedstoneSwitch ls, BlockPos pos) {
-		super(ls.getName(), ls.isEnabled(), ls.getPower());
-		this.switchPos = pos;
+		this(ls.getName(), ls.isEnabled(), ls.getPower(), pos);
 	}
 
 	public MasterRedstoneSwitch(String name, boolean enabled, int power, BlockPos pos) {
@@ -20,27 +19,25 @@ public class MasterRedstoneSwitch extends BaseRedstoneSwitch {
 		this.switchPos = pos;
 	}
 
+	@Override
+	public void deserializeNBT(NBTTagCompound c) {
+		super.deserializeNBT(c);
+		setSwitchPos(BlockPos.fromLong(c.getLong("pos")));
+	}
+
 	public BlockPos getSwitchPos() {
 		return switchPos;
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound c) {
-		super.deserializeNBT(c);
-		setSwitchPos(new BlockPos(c.getInteger("x"), c.getInteger("y"), c.getInteger("z")));
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound c = super.serializeNBT();
+		c.setLong("pos", switchPos.toLong());
+		return c;
 	}
 
 	public void setSwitchPos(BlockPos pos) {
 		this.switchPos = pos;
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound c = super.serializeNBT();
-		c.setInteger("x", getSwitchPos().getX());
-		c.setInteger("y", getSwitchPos().getY());
-		c.setInteger("z", getSwitchPos().getZ());
-		return c;
 	}
 
 }

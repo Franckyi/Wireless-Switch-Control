@@ -18,6 +18,13 @@ public abstract class BaseRedstoneSwitch implements INBTSerializable<NBTTagCompo
 		this.power = power;
 	}
 
+	@Override
+	public void deserializeNBT(NBTTagCompound c) {
+		setName(c.getString("name"));
+		setEnabled(c.getBoolean("enabled"));
+		setPower(c.getInteger("power"));
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -31,10 +38,12 @@ public abstract class BaseRedstoneSwitch implements INBTSerializable<NBTTagCompo
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound c) {
-		setName(c.getString("name"));
-		setEnabled(c.getBoolean("enabled"));
-		setPower(c.getInteger("power"));
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound c = new NBTTagCompound();
+		c.setString("name", getName());
+		c.setBoolean("enabled", isEnabled());
+		c.setInteger("power", getPower());
+		return c;
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -48,16 +57,5 @@ public abstract class BaseRedstoneSwitch implements INBTSerializable<NBTTagCompo
 	public void setPower(int power) {
 		this.power = power;
 	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound c = new NBTTagCompound();
-		c.setString("name", getName());
-		c.setBoolean("enabled", isEnabled());
-		c.setInteger("power", getPower());
-		return c;
-	}
-	
-	
 
 }
