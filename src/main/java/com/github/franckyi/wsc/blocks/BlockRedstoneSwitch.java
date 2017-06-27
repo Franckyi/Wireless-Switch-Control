@@ -13,7 +13,6 @@ import com.github.franckyi.wsc.logic.FullRedstoneController;
 import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
-import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 import com.github.franckyi.wsc.util.ChatUtil;
 import com.google.common.base.Optional;

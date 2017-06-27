@@ -11,18 +11,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class ClientProxy extends CommonProxy {
 
 	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		super.preInit(event);
-		RegisterUtil.registerRenders();
-	}
-
-	@Override
 	public void clientHandler(ClientHandler<? extends IMessage> clientHandler, MessageContext ctx) {
 		clientHandler.world = Minecraft.getMinecraft().world;
 		clientHandler.mainThread = Minecraft.getMinecraft();
 		clientHandler.mainThread.addScheduledTask(clientHandler);
 	}
 
-	
-	
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+		super.preInit(event);
+		RegisterUtil.registerRenders();
+	}
+
 }

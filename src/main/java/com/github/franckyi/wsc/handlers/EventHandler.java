@@ -17,26 +17,29 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 public class EventHandler {
 
 	@SubscribeEvent
-	public void onPlayerLogsIn(PlayerLoggedInEvent event) {
-		RedstoneCapabilities.getLink(event.player).reset();
-	}
-
-	@SubscribeEvent
 	public void onChunkWatch(ChunkWatchEvent.Watch event) {
 		WorldServer world = event.getPlayer().getServerWorld();
 		if (!world.isRemote) {
 			for (TileEntity te : world.loadedTileEntityList) {
 				if (event.getChunk().equals(world.getChunkFromBlockCoords(te.getPos()).getPos())) {
 					if (te instanceof TileEntityRedstoneSwitch) {
-						PacketHandler.INSTANCE.sendTo(new UpdateRedstoneSwitchMessage(te.getPos(),
-								te.getCapability(RedstoneSwitchProvider.SWITCH_CAP, null).getSwitch()), event.getPlayer());
+						PacketHandler.INSTANCE.sendTo(
+								new UpdateRedstoneSwitchMessage(te.getPos(),
+										te.getCapability(RedstoneSwitchProvider.SWITCH_CAP, null).getSwitch()),
+								event.getPlayer());
 					} else if (te instanceof TileEntityRedstoneController) {
 						PacketHandler.INSTANCE.sendTo(new UpdateRedstoneControllerMessage(te.getPos(),
-								te.getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null).getController()), event.getPlayer());
+								te.getCapability(RedstoneControllerProvider.CONTROLLER_CAP, null).getController()),
+								event.getPlayer());
 					}
 				}
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerLogsIn(PlayerLoggedInEvent event) {
+		RedstoneCapabilities.getLink(event.player).reset();
 	}
 
 }

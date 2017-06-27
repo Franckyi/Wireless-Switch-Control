@@ -49,12 +49,12 @@ public class RedstoneUnlinkingMessage implements IMessage {
 
 	private BlockPos switchPos, controllerPos;
 
+	public RedstoneUnlinkingMessage() {
+	}
+
 	public RedstoneUnlinkingMessage(BlockPos switchPos, BlockPos controllerPos) {
 		this.switchPos = switchPos;
 		this.controllerPos = controllerPos;
-	}
-	
-	public RedstoneUnlinkingMessage() {
 	}
 
 	@Override

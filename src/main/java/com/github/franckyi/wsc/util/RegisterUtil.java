@@ -39,19 +39,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class RegisterUtil {
 
-	public static void registerRenders() {
-		for (Block block : ModBlocks.BLOCKS)
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-					new ModelResourceLocation(block.getRegistryName(), "inventory"));
-		for (Item item : ModItems.ITEMS)
-			ModelLoader.setCustomModelResourceLocation(item, 0,
-					new ModelResourceLocation(item.getRegistryName(), "inventory"));
-	}
-	
-	public static void registerGuiHandler() {
-		NetworkRegistry.INSTANCE.registerGuiHandler(WSCMod.instance, new GuiHandler());
-	}
-
 	public static void registerBlocks() {
 		for (Block block : ModBlocks.BLOCKS) {
 			final ItemBlock itemblock = new ItemBlock(block);
@@ -72,6 +59,10 @@ public class RegisterUtil {
 	public static void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
+	}
+
+	public static void registerGuiHandler() {
+		NetworkRegistry.INSTANCE.registerGuiHandler(WSCMod.instance, new GuiHandler());
 	}
 
 	public static void registerItems() {
@@ -99,6 +90,15 @@ public class RegisterUtil {
 				Items.REDSTONE);
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_SWITCH)), "ABA", "CDC", "ACA",
 				'A', Items.IRON_INGOT, 'B', Blocks.LEVER, 'C', Items.REDSTONE, 'D', Blocks.REDSTONE_BLOCK);
+	}
+
+	public static void registerRenders() {
+		for (Block block : ModBlocks.BLOCKS)
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+					new ModelResourceLocation(block.getRegistryName(), "inventory"));
+		for (Item item : ModItems.ITEMS)
+			ModelLoader.setCustomModelResourceLocation(item, 0,
+					new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 
 	public static void registerTileEntities() {

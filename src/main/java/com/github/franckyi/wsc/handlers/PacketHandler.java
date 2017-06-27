@@ -3,10 +3,8 @@ package com.github.franckyi.wsc.handlers;
 import com.github.franckyi.wsc.ModReference;
 import com.github.franckyi.wsc.WSCMod;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
