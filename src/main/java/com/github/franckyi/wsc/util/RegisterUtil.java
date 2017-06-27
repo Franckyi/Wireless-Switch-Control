@@ -31,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -39,9 +40,10 @@ public class RegisterUtil {
 	private static void registerBlocks(FMLPreInitializationEvent e, Block... blocks) {
 		for (Block block : blocks) {
 			final ItemBlock itemblock = new ItemBlock(block);
+			itemblock.setRegistryName(block.getRegistryName());
+			ForgeRegistries.BLOCKS.register(block);
+			ForgeRegistries.ITEMS.register(itemblock);
 			if (e.getSide() == Side.CLIENT) {
-				GameRegistry.register(block);
-				GameRegistry.register(itemblock, block.getRegistryName());
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
 						new ModelResourceLocation(block.getRegistryName(), "inventory"));
 			}
@@ -69,8 +71,8 @@ public class RegisterUtil {
 
 	private static void registerItems(FMLPreInitializationEvent e, Item... items) {
 		for (Item item : items) {
+			ForgeRegistries.ITEMS.register(item);
 			if (e.getSide() == Side.CLIENT) {
-				GameRegistry.register(item);
 				ModelLoader.setCustomModelResourceLocation(item, 0,
 						new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
