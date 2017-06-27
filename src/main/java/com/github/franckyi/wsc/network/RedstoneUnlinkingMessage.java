@@ -53,6 +53,9 @@ public class RedstoneUnlinkingMessage implements IMessage {
 		this.switchPos = switchPos;
 		this.controllerPos = controllerPos;
 	}
+	
+	public RedstoneUnlinkingMessage() {
+	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {

@@ -1,6 +1,7 @@
 package com.github.franckyi.wsc.handlers;
 
 import com.github.franckyi.wsc.ModReference;
+import com.github.franckyi.wsc.WSCMod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.IThreadListener;
@@ -19,9 +20,7 @@ public class PacketHandler {
 		@Override
 		public IMessage onMessage(REQ message, MessageContext ctx) {
 			super.onMessage(message, ctx);
-			this.world = Minecraft.getMinecraft().world;
-			this.mainThread = Minecraft.getMinecraft();
-			this.mainThread.addScheduledTask(this);
+			WSCMod.proxy.clientHandler(this, ctx);
 			return null;
 		}
 
@@ -30,8 +29,8 @@ public class PacketHandler {
 	public static abstract class CommonHandler<REQ extends IMessage>
 			implements IMessageHandler<REQ, IMessage>, Runnable {
 
-		protected World world;
-		protected IThreadListener mainThread;
+		public World world;
+		public IThreadListener mainThread;
 		protected REQ message;
 		protected MessageContext ctx;
 
@@ -49,9 +48,7 @@ public class PacketHandler {
 		@Override
 		public IMessage onMessage(REQ message, MessageContext ctx) {
 			super.onMessage(message, ctx);
-			this.world = ctx.getServerHandler().player.world;
-			this.mainThread = (WorldServer) this.world;
-			this.mainThread.addScheduledTask(this);
+			WSCMod.proxy.serverHandler(this, ctx);
 			return null;
 		}
 

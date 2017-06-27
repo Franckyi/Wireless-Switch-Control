@@ -1,5 +1,6 @@
 package com.github.franckyi.wsc.util;
 
+import com.github.franckyi.wsc.WSCMod;
 import com.github.franckyi.wsc.capability.redstonecontroller.IRedstoneController;
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneController;
 import com.github.franckyi.wsc.capability.redstonecontroller.RedstoneControllerStorage;
@@ -11,6 +12,7 @@ import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchImpl;
 import com.github.franckyi.wsc.capability.redstoneswitch.RedstoneSwitchStorage;
 import com.github.franckyi.wsc.handlers.CapabilityHandler;
 import com.github.franckyi.wsc.handlers.EventHandler;
+import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
 import com.github.franckyi.wsc.init.ModItems;
@@ -30,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,6 +46,10 @@ public class RegisterUtil {
 		for (Item item : ModItems.ITEMS)
 			ModelLoader.setCustomModelResourceLocation(item, 0,
 					new ModelResourceLocation(item.getRegistryName(), "inventory"));
+	}
+	
+	public static void registerGuiHandler() {
+		NetworkRegistry.INSTANCE.registerGuiHandler(WSCMod.instance, new GuiHandler());
 	}
 
 	public static void registerBlocks() {
