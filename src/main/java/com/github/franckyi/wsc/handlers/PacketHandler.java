@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public class PacketHandler {
 
-	public static abstract class ClientHandler<REQ extends IMessage> extends CommonHandler<REQ, IMessage> {
+	public static abstract class ClientHandler<REQ extends IMessage> extends CommonHandler<REQ> {
 
 		@Override
 		public IMessage onMessage(REQ message, MessageContext ctx) {
@@ -27,25 +27,24 @@ public class PacketHandler {
 
 	}
 
-	public static abstract class CommonHandler<REQ extends IMessage, REPLY extends IMessage>
-			implements IMessageHandler<REQ, REPLY>, Runnable {
+	public static abstract class CommonHandler<REQ extends IMessage>
+			implements IMessageHandler<REQ, IMessage>, Runnable {
 
 		protected World world;
 		protected IThreadListener mainThread;
 		protected REQ message;
-		protected REPLY reply;
 		protected MessageContext ctx;
 
 		@Override
-		public REPLY onMessage(REQ message, MessageContext ctx) {
+		public IMessage onMessage(REQ message, MessageContext ctx) {
 			this.message = message;
 			this.ctx = ctx;
-			return reply;
+			return null;
 		}
 
 	}
 
-	public static abstract class ServerHandler<REQ extends IMessage> extends CommonHandler<REQ, IMessage> {
+	public static abstract class ServerHandler<REQ extends IMessage> extends CommonHandler<REQ> {
 
 		@Override
 		public IMessage onMessage(REQ message, MessageContext ctx) {

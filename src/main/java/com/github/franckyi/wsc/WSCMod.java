@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.franckyi.wsc.proxy.CommonProxy;
+import com.github.franckyi.wsc.proxy.IProxy;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -22,16 +23,11 @@ public class WSCMod {
 	public static WSCMod instance;
 
 	@SidedProxy(clientSide = ModReference.CLIENTPROXY, serverSide = ModReference.COMMONPROXY)
-	public static CommonProxy proxy;
+	public static IProxy proxy;
 
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
 		proxy.init(e);
-	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent e) {
-		proxy.postInit(e);
 	}
 
 	@EventHandler

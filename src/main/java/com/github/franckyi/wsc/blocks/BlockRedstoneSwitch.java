@@ -13,6 +13,7 @@ import com.github.franckyi.wsc.logic.FullRedstoneController;
 import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
+import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 import com.github.franckyi.wsc.util.ChatUtil;
 import com.google.common.base.Optional;
@@ -22,12 +23,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BlockRedstoneSwitch extends Block {
 
@@ -67,7 +70,14 @@ public class BlockRedstoneSwitch extends Block {
 					}
 				}
 			}
-			PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneControllerMessage(updateControllers));
+			WorldServer worldServer = (WorldServer) world;
+			for (EntityPlayer player : worldServer.playerEntities) {
+				EntityPlayerMP playerMP = (EntityPlayerMP) player;
+				if (worldServer.getPlayerChunkMap()
+						.getEntry(world.getChunkFromBlockCoords(pos).x, world.getChunkFromBlockCoords(pos).z)
+						.containsPlayer(playerMP))
+					PacketHandler.INSTANCE.sendTo(new UpdateRedstoneControllerMessage(updateControllers), playerMP);
+			}
 		}
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
