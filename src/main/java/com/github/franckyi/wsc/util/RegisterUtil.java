@@ -17,7 +17,6 @@ import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
 import com.github.franckyi.wsc.init.ModItems;
 import com.github.franckyi.wsc.items.ItemBlockMeta;
-import com.github.franckyi.wsc.items.ItemRedstoneControllerUpgrade;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
@@ -26,10 +25,7 @@ import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
