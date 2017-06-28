@@ -42,7 +42,7 @@ import net.minecraft.world.WorldServer;
 public class BlockRedstoneController extends Block {
 
 	public static final PropertyInteger UPGRADES = PropertyInteger.create("upgrades", 0, 15);
-	
+
 	public static ItemStack tileEntityToItemStack(ItemStack is, TileEntityRedstoneController te) {
 		return is;
 	}
@@ -60,7 +60,7 @@ public class BlockRedstoneController extends Block {
 		setDefaultState(this.blockState.getBaseState().withProperty(UPGRADES, 0));
 		isBlockContainer = true;
 	}
-	
+
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world, pos);
@@ -89,24 +89,24 @@ public class BlockRedstoneController extends Block {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-	    return new BlockStateContainer(this, new IProperty[] { UPGRADES });
+		return new BlockStateContainer(this, new IProperty[] { UPGRADES });
 	}
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntityRedstoneController();
+		return new TileEntityRedstoneController(state.getValue(UPGRADES));
 	}
-	
+
 	@Override
 	public int damageDropped(IBlockState state) {
-	    return getMetaFromState(state);
+		return getMetaFromState(state);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-	    return state.getValue(UPGRADES);
+		return state.getValue(UPGRADES);
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
 			EntityPlayer player) {
@@ -115,7 +115,7 @@ public class BlockRedstoneController extends Block {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-	    return getDefaultState().withProperty(UPGRADES, meta);
+		return getDefaultState().withProperty(UPGRADES, meta);
 	}
 
 	@Override
@@ -135,8 +135,17 @@ public class BlockRedstoneController extends Block {
 		if (!worldIn.isRemote && playerIn.isSneaking()) {
 			Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(worldIn, pos);
 			if (controller.isPresent()) {
-				if(playerIn.getHeldItem(hand).getItem() instanceof ItemRedstoneControllerUpgrade) {
-					
+				if (playerIn.getHeldItemMainhand().getItem() instanceof ItemRedstoneControllerUpgrade) {
+					if (state.getValue(UPGRADES).intValue() != 15) {
+						playerIn.getHeldItemMainhand().shrink(1);
+						worldIn.setBlockState(pos, state.cycleProperty(UPGRADES));
+						controller.get().upgrade();
+						PacketHandler.INSTANCE.sendToAll(new UpdateRedstoneControllerMessage(pos, controller.get()));
+						ChatUtil.sendSuccess(playerIn,
+								"The controller has been upgraded to level " + (state.getValue(UPGRADES) + 2) + " on 16 !");
+					} else
+						ChatUtil.sendError(playerIn, "The controller is already fully upgraded !");
+					return true;
 				}
 				IRedstoneLink link = RedstoneCapabilities.getLink(playerIn);
 				if (link.isPresent()) {

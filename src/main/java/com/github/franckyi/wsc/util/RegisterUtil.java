@@ -17,6 +17,7 @@ import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
 import com.github.franckyi.wsc.init.ModItems;
 import com.github.franckyi.wsc.items.ItemBlockMeta;
+import com.github.franckyi.wsc.items.ItemRedstoneControllerUpgrade;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
@@ -90,12 +91,17 @@ public class RegisterUtil {
 				Items.REDSTONE);
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.REDSTONE_SWITCH)), "ABA", "CDC", "ACA",
 				'A', Items.IRON_INGOT, 'B', Blocks.LEVER, 'C', Items.REDSTONE, 'D', Blocks.REDSTONE_BLOCK);
+		GameRegistry.addRecipe(new ItemStack(ModItems.REDSTONE_CONTROLLER_UPGRADE), "ABA", "BCB", "ABA", 'A',
+				Items.IRON_INGOT, 'B', Items.REDSTONE, 'C', Items.COMPARATOR);
 	}
 
 	public static void registerRenders() {
 		for (Block block : ModBlocks.BLOCKS)
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
 					new ModelResourceLocation(block.getRegistryName(), "inventory"));
+		for(int i = 1; i < 16; i++)
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.REDSTONE_CONTROLLER), i,
+					new ModelResourceLocation(ModBlocks.REDSTONE_CONTROLLER.getRegistryName(), "inventory"));
 		for (Item item : ModItems.ITEMS)
 			ModelLoader.setCustomModelResourceLocation(item, 0,
 					new ModelResourceLocation(item.getRegistryName(), "inventory"));
