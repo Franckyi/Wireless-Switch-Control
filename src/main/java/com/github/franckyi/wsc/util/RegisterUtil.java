@@ -16,6 +16,7 @@ import com.github.franckyi.wsc.handlers.GuiHandler;
 import com.github.franckyi.wsc.handlers.PacketHandler;
 import com.github.franckyi.wsc.init.ModBlocks;
 import com.github.franckyi.wsc.init.ModItems;
+import com.github.franckyi.wsc.items.ItemBlockMeta;
 import com.github.franckyi.wsc.network.RedstoneUnlinkingMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
@@ -27,7 +28,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,7 +41,7 @@ public class RegisterUtil {
 
 	public static void registerBlocks() {
 		for (Block block : ModBlocks.BLOCKS) {
-			final ItemBlock itemblock = new ItemBlock(block);
+			final ItemBlockMeta itemblock = new ItemBlockMeta(block);
 			itemblock.setRegistryName(block.getRegistryName());
 			ForgeRegistries.BLOCKS.register(block);
 			ForgeRegistries.ITEMS.register(itemblock);
