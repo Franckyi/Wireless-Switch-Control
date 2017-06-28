@@ -7,7 +7,7 @@ import com.github.franckyi.wsc.logic.FullRedstoneController;
 import com.github.franckyi.wsc.logic.FullRedstoneSwitch;
 import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +22,7 @@ public class RedstoneUnlinkingMessage implements IMessage {
 			Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world,
 					message.controllerPos);
 			if (controller.isPresent()) {
-				Optional<MasterRedstoneSwitch> toRemove = Optional.absent();
+				Optional<MasterRedstoneSwitch> toRemove = Optional.empty();
 				for (MasterRedstoneSwitch s : controller.get().getSwitches())
 					if (s.getSwitchPos().equals(message.switchPos)) {
 						toRemove = Optional.of(s);

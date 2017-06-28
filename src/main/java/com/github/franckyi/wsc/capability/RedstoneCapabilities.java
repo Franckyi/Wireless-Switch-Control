@@ -6,7 +6,7 @@ import com.github.franckyi.wsc.logic.BaseRedstoneController;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +19,7 @@ public class RedstoneCapabilities {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityRedstoneController)
 			return Optional.of(((TileEntityRedstoneController) te).getController());
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	public static IRedstoneLink getLink(EntityPlayer player) {
@@ -32,7 +32,7 @@ public class RedstoneCapabilities {
 			SlaveRedstoneSwitch sls = ((TileEntityRedstoneSwitch) te).getSwitch();
 			return Optional.of(sls);
 		}
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	public static void setController(IBlockAccess world, BlockPos pos, BaseRedstoneController controller) {

@@ -1,6 +1,7 @@
 {
     "result": {
-        "item": "wsc:redstone_controller"
+        "item": "wsc:redstone_controller",
+        "data": 0
     },
 
     "pattern": [

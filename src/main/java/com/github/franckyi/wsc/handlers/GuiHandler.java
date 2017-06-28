@@ -5,7 +5,7 @@ import com.github.franckyi.wsc.gui.GuiRedstoneController;
 import com.github.franckyi.wsc.gui.GuiRedstoneSwitch;
 import com.github.franckyi.wsc.logic.BaseRedstoneController;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

@@ -10,7 +10,7 @@ import com.github.franckyi.wsc.logic.FullRedstoneController;
 import com.github.franckyi.wsc.logic.FullRedstoneSwitch;
 import com.github.franckyi.wsc.logic.MasterRedstoneSwitch;
 import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;

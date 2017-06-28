@@ -15,7 +15,7 @@ import com.github.franckyi.wsc.logic.SlaveRedstoneSwitch;
 import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneSwitch;
 import com.github.franckyi.wsc.util.ChatUtil;
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -55,7 +55,7 @@ public class BlockRedstoneSwitch extends Block {
 				final Optional<BaseRedstoneController> controller = RedstoneCapabilities.getController(world,
 						controllerPos);
 				if (controller.isPresent()) {
-					Optional<MasterRedstoneSwitch> toRemove = Optional.absent();
+					Optional<MasterRedstoneSwitch> toRemove = Optional.empty();
 					for (MasterRedstoneSwitch controllerSwitch : controller.get().getSwitches()) {
 						if (controllerSwitch.getSwitchPos().equals(pos)) {
 							toRemove = Optional.of(controllerSwitch);

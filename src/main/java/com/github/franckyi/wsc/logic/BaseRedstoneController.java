@@ -67,4 +67,8 @@ public class BaseRedstoneController implements INBTSerializable<NBTTagCompound> 
 		this.switches = switches;
 	}
 
+	public void upgrade() {
+		this.maxSize += 4;
+	}
+
 }

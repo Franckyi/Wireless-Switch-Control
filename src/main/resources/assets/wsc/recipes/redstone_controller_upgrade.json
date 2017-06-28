@@ -1,13 +1,12 @@
 {
     "result": {
-        "item": "wsc:redstone_switch",
-        "data": 0
+        "item": "wsc:redstone_controller_upgrade"
     },
 
     "pattern": [
         "aba",
-        "cdc",
-        "aca"
+        "bcb",
+        "aba"
     ],
 
     "type": "minecraft:crafting_shaped",
@@ -17,15 +16,11 @@
         },
 
         "b": {
-            "item": "minecraft:lever"
-        },
-
-        "c": {
             "item": "minecraft:redstone"
         },
 
-        "d": {
-            "item": "minecraft:redstone_block"
+        "c": {
+            "item": "minecraft:comparator"
         }
     }
 }

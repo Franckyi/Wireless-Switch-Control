@@ -1,6 +1,66 @@
 {
     "variants": {
-        "normal": {
+        "upgrades=0": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=1": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=2": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=3": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=4": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=5": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=6": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=7": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=8": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=9": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=10": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=11": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=12": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=13": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=14": {
+            "model": "wsc:redstone_controller"
+        },
+
+        "upgrades=15": {
             "model": "wsc:redstone_controller"
         }
     }
