@@ -1,6 +1,7 @@
 package com.github.franckyi.wsc.blocks;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.github.franckyi.wsc.WSCMod;
@@ -17,7 +18,6 @@ import com.github.franckyi.wsc.network.UpdateRedstoneControllerMessage;
 import com.github.franckyi.wsc.network.UpdateRedstoneSwitchMessage;
 import com.github.franckyi.wsc.tileentity.TileEntityRedstoneController;
 import com.github.franckyi.wsc.util.ChatUtil;
-import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,7 +28,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
