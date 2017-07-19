@@ -1,7 +1,7 @@
 [
 {
-  "modid": "wsc",
-  "name": "Wireless Switch Control",
+  "modid": "wrc",
+  "name": "Wireless Redstone Control",
   "description": "Control your redstone signals easily !",
   "version": "${version}",
   "mcversion": "${mcversion}",
