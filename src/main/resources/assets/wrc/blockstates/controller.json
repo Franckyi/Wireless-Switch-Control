@@ -1,9 +1,9 @@
 {
-    "variants": {
-        "normal": [
-            {
-                "model": "wrc:controller"
-            }
-        ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "wrc:controller"
+      }
+    ]
+  }
 }
