@@ -1,9 +1,19 @@
 {
   "variants": {
-    "normal": [
-      {
-        "model": "wrc:controller"
-      }
-    ]
+    "facing=north": {
+      "model": "wrc:controller"
+    },
+    "facing=south": {
+      "model": "wrc:controller",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "wrc:controller",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "wrc:controller",
+      "y": 90
+    }
   }
 }

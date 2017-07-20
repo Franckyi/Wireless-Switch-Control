@@ -6,8 +6,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-import javax.annotation.Nullable;
-
 public class TileEntityController extends TileEntity {
 
     private int maxSize;
@@ -15,7 +13,7 @@ public class TileEntityController extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        setMaxSize(compound.getInteger("MaxSize"));
+        this.maxSize = compound.getInteger("MaxSize");
     }
 
     @Override
@@ -29,7 +27,6 @@ public class TileEntityController extends TileEntity {
         return writeToNBT(new NBTTagCompound());
     }
 
-    @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
@@ -48,10 +45,14 @@ public class TileEntityController extends TileEntity {
 
     public void setMaxSize(int maxSize) {
         this.maxSize = maxSize;
+        blockUpdate();
     }
 
     public void upgradeSize() {
-        maxSize++;
+        setMaxSize(maxSize++);
+    }
+
+    public void blockUpdate() {
         markDirty();
         if (world != null) {
             IBlockState state = world.getBlockState(getPos());
