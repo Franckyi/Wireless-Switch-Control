@@ -2,6 +2,7 @@ package com.github.franckyi.wrc.init;
 
 import com.github.franckyi.wrc.WirelessRedstoneControl;
 import com.github.franckyi.wrc.tileentity.TileEntityController;
+import com.github.franckyi.wrc.tileentity.TileEntityBasicSensor;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -28,6 +29,7 @@ public class ModInitialization {
     private static void registerTileEntities() {
         WirelessRedstoneControl.logger.info("Registring Tile Entities");
         GameRegistry.registerTileEntity(TileEntityController.class, "controller");
+        GameRegistry.registerTileEntity(TileEntityBasicSensor.class, "basic_sensor");
     }
 
     @SubscribeEvent

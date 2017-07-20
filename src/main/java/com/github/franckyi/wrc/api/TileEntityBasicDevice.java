@@ -33,9 +33,14 @@ public abstract class TileEntityBasicDevice extends TileEntityDevice {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        if(isLinked()) {
+        if (isLinked()) {
             compound.setLong("LinkedDevicePos", linkedDevicePos.toLong());
         }
         return super.writeToNBT(compound);
+    }
+
+    public void setLinkedDevicePos(BlockPos linkedDevicePos) {
+        this.linkedDevicePos = linkedDevicePos;
+        blockUpdate();
     }
 }

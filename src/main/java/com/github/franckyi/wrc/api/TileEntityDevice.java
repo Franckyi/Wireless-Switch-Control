@@ -4,7 +4,6 @@ import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -13,27 +12,34 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class TileEntityDevice extends TileEntity implements ITickable {
 
-    private Map<EnumFacing, Integer> transmittingPower = new HashMap<>();
-    private Map<EnumFacing, Integer> receivingPower = new HashMap<>();
+    private int transmittingPower, receivingPower;
 
     public TileEntityDevice() {
         super();
-        getTransmittingFaces().forEach(enumFacing -> transmittingPower.put(enumFacing, 0));
-        getReceivingFaces().forEach(enumFacing -> receivingPower.put(enumFacing, 0));
     }
 
-    public Map<EnumFacing, Integer> getTransmittingPower() {
+    public int getTransmittingPower() {
         return transmittingPower;
     }
 
-    public Map<EnumFacing, Integer> getReceivingPower() {
+    public void setTransmittingPower(int transmittingPower) {
+        this.transmittingPower = transmittingPower;
+        blockUpdate();
+    }
+
+    public int getReceivingPower() {
         return receivingPower;
+    }
+
+    public void setReceivingPower(int receivingPower) {
+        this.receivingPower = receivingPower;
+        blockUpdate();
     }
 
     public abstract Set<EnumFacing> getTransmittingFaces();
@@ -42,13 +48,17 @@ public abstract class TileEntityDevice extends TileEntity implements ITickable {
 
     @Override
     public void update() {
-        receivingPower.forEach((enumFacing, power) -> {
-            int newPower = calculateInputStrength(world, pos, enumFacing);
-            if(newPower != power) {
-                receivingPower.put(enumFacing, newPower);
-                blockUpdate();
+        int power = 0;
+        for(EnumFacing enumFacing : getReceivingFaces()) {
+            int facingPower = calculateInputStrength(world, pos, enumFacing);
+            if(facingPower > power) {
+                power = facingPower;
             }
-        });
+        }
+        if(power != receivingPower) {
+            receivingPower = power;
+            blockUpdate();
+        }
     }
 
     protected int calculateInputStrength(World worldIn, BlockPos pos, EnumFacing enumFacing) {
@@ -65,34 +75,14 @@ public abstract class TileEntityDevice extends TileEntity implements ITickable {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        transmittingPower = tagListToMap(compound.getTagList("TransmittingPower", 10));
-        receivingPower = tagListToMap(compound.getTagList("ReceivingPower", 10));
-    }
-
-    private NBTTagList mapToTagList(Map<EnumFacing, Integer> map) {
-        NBTTagList r = new NBTTagList();
-        map.forEach((key, value) -> {
-            NBTTagCompound c = new NBTTagCompound();
-            c.setInteger("Facing", key.getIndex());
-            c.setInteger("Power", value);
-            r.appendTag(c);
-        });
-        return r;
-    }
-
-    private Map<EnumFacing, Integer> tagListToMap(NBTTagList list) {
-        Map<EnumFacing, Integer> map = new HashMap<>();
-        list.forEach(nbtBase -> {
-            NBTTagCompound c = (NBTTagCompound) nbtBase;
-            map.put(EnumFacing.getFront(c.getInteger("Facing")), c.getInteger("Power"));
-        });
-        return map;
+        transmittingPower = compound.getInteger("TransmittingPower");
+        receivingPower = compound.getInteger("ReceivingPower");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setTag("TransmittingPower", mapToTagList(transmittingPower));
-        compound.setTag("ReceivingPower", mapToTagList(receivingPower));
+        compound.setInteger("TransmittingPower", transmittingPower);
+        compound.setInteger("ReceivingPower", receivingPower);
         return super.writeToNBT(compound);
     }
 
@@ -120,5 +110,9 @@ public abstract class TileEntityDevice extends TileEntity implements ITickable {
             world.notifyBlockUpdate(getPos(), state, state, 3);
         }
     }
+
+    protected final Set<EnumFacing> FACES_NONE = new HashSet<>();
+    protected final Set<EnumFacing> FACES_ALL = new HashSet<>(Arrays.asList(EnumFacing.VALUES));
+    protected final Set<EnumFacing> FACES_HORIZONTALS = new HashSet<>(Arrays.asList(EnumFacing.HORIZONTALS));
 
 }
